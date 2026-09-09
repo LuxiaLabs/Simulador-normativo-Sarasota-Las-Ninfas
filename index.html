@@ -30,14 +30,15 @@ button{font:inherit;cursor:pointer}
 
 .res{background:#fff;border-bottom:1px solid var(--ink-100);position:sticky;top:0;z-index:10;
   box-shadow:0 2px 14px rgba(0,0,0,.05)}
-.res .shell{padding:16px 22px;display:flex;gap:34px;align-items:center;flex-wrap:wrap}
+.res .shell{padding:16px 22px 14px}
+.nums{display:flex;gap:34px;align-items:center;flex-wrap:wrap}
 .big{display:flex;flex-direction:column}
 .big .v{font-family:var(--fm);font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1}
 .big.b .v{color:var(--ll-blue)}
 .big .k{font-size:12px;color:var(--ink-500);margin-top:5px}
 .big .d{font-family:var(--fm);font-size:11px;margin-top:3px}
 .up{color:var(--success)} .down{color:var(--danger)}
-.veredicto{margin-left:auto;max-width:330px;font-size:12.5px;line-height:1.45;padding:10px 13px;
+.veredicto{margin-top:14px;font-size:12.5px;line-height:1.45;padding:9px 14px;
   border-left:3px solid;background:var(--succ-bg);border-color:var(--success);color:#0a5c34}
 .veredicto b{font-weight:700}
 
@@ -100,7 +101,7 @@ tr.tot td.n{color:var(--ll-blue)}
 .msg{font-family:var(--fm);font-size:11.5px;color:var(--success)}
 .foot{padding:26px 0 50px;font-size:11.5px;color:var(--ink-400);line-height:1.65}
 @media print{ .res{position:static} .dec,.acts,.btn{display:none} details.det{border:none} details.det>summary{display:none} .det-bd{padding:0} }
-@media (max-width:640px){ .hero h1{font-size:26px} .res .shell{gap:20px} .big .v{font-size:23px} .veredicto{margin-left:0} }
+@media (max-width:640px){ .hero h1{font-size:26px} .nums{gap:20px} .big .v{font-size:23px} }
 </style></head>
 <body>
 
@@ -283,6 +284,7 @@ function render(){
   const D = calc(estado(DEFECTO));
   const difBase = R.total.neta - D.total.neta;
   document.getElementById('resumen').innerHTML = `
+    <div class="nums">
     <div class="big b"><div class="v">${M(R.total.neta)}</div><div class="k">Utilidad neta del conjunto</div>
       <div class="d ${dif>=0?'up':'down'}">${dif>=0?'▲':'▼'} ${M(Math.abs(dif))} vs. lo presentado</div></div>
     <div class="big"><div class="v">${M(R.total.ingresos)}</div><div class="k">Ingresos por ventas</div>
@@ -291,6 +293,7 @@ function render(){
       <div class="d" style="color:var(--ink-400)">${nf(R.total.unidades)} unidades + oficinas</div></div>
     <div class="big"><div class="v">${M(R.total.caja)}</div><div class="k">Caja durante la obra</div>
       <div class="d" style="color:var(--ink-400)">la aporta la preventa</div></div>
+    </div>
     <div class="veredicto">${
       Math.abs(difBase) < 50000
       ? `<b>Escenario de partida.</b> Todo el conjunto queda dentro de la normativa de cada solar.
