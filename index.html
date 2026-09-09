@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulador normativo — Sarasota × Las Ninfas · Luxia Labs</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap');
+:root{
+  --ll-black:#000000; --ll-blue:#1906F5; --ll-white:#FFFFFF;
+  --ink-900:#0A0A0C; --ink-800:#15161A; --ink-700:#232429; --ink-600:#3A3B42;
+  --ink-500:#5C5E66; --ink-400:#888A92; --ink-300:#B4B6BD; --ink-200:#D6D7DC;
+  --ink-100:#E8E9ED; --ink-050:#F4F4F7; --ink-000:#FAFAFC;
+  --blue-100:#E5E2FF; --blue-050:#F2F0FF; --blue-soft:#8f9dff;
+  --sara:#1906F5; --heli:#C77A00;
+  --fd:'Manrope',ui-sans-serif,system-ui,sans-serif;
+  --fs:'Roboto',ui-sans-serif,system-ui,sans-serif;
+  --fm:'JetBrains Mono',ui-monospace,monospace;
+  --warning:#C77A00; --warn-bg:#FFF6E6; --success:#0F8A4E; --succ-bg:#EAF7F0;
+  --danger:#C0261E; --dang-bg:#FDEDEC;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--fs);color:var(--ink-800);background:var(--ink-050);-webkit-font-smoothing:antialiased;font-size:14px}
+button{font:inherit;cursor:pointer} input,select{font:inherit}
+
+.top{background:var(--ll-black);color:#fff;position:sticky;top:0;z-index:20;border-bottom:3px solid var(--ll-blue)}
+.top-in{max-width:1660px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.mark{font-family:var(--fd);font-weight:800;font-size:18px;letter-spacing:-.01em;white-space:nowrap}
+.mark span{color:var(--blue-soft);font-style:italic;font-weight:600}
+.top h1{font-family:var(--fd);font-size:14px;font-weight:500;color:rgba(255,255,255,.75);letter-spacing:-.01em}
+.top h1 b{color:#fff;font-weight:700}
+.presets{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap}
+.chip{background:transparent;color:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.3);
+  padding:6px 12px;font-family:var(--fd);font-size:12px;font-weight:600;border-radius:2px;transition:.15s}
+.chip:hover{border-color:#fff;color:#fff}
+.chip.on{background:var(--ll-blue);border-color:var(--ll-blue);color:#fff}
+
+.kpis{background:var(--ll-white);border-bottom:1px solid var(--ink-100)}
+.kpis-in{max-width:1660px;margin:0 auto;padding:18px 24px;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:24px}
+.kpi{border-top:2px solid var(--ll-black);padding-top:10px}
+.kpi.b{border-top-color:var(--ll-blue)}
+.kpi .v{font-family:var(--fm);font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.kpi.b .v{color:var(--ll-blue)}
+.kpi .v em{font-style:normal;font-size:13px;color:var(--ink-400);font-weight:400}
+.kpi .k{font-family:var(--fd);font-size:11px;color:var(--ink-500);margin-top:5px;font-weight:500}
+.kpi .d{font-family:var(--fm);font-size:10.5px;margin-top:3px;color:var(--ink-400)}
+.up{color:var(--success)} .down{color:var(--danger)}
+
+.wrap{max-width:1660px;margin:0 auto;padding:20px 24px 70px;display:grid;
+  grid-template-columns:410px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:1120px){.wrap{grid-template-columns:1fr}}
+.rail{background:var(--ll-white);border:1px solid var(--ink-100);position:sticky;top:92px;
+  max-height:calc(100vh - 112px);overflow-y:auto}
+@media (max-width:1120px){.rail{position:static;max-height:none}}
+.rail-hd{padding:14px 16px;border-bottom:1px solid var(--ink-100)}
+.rail-hd h2{font-family:var(--fd);font-size:14px;font-weight:800}
+.rail-hd p{font-size:11px;color:var(--ink-400);margin-top:3px;line-height:1.4}
+details.grp{border-bottom:1px solid var(--ink-100)}
+details.grp>summary{padding:11px 16px;font-family:var(--fd);font-weight:700;font-size:12.5px;
+  cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;background:var(--ink-000)}
+details.grp>summary::-webkit-details-marker{display:none}
+details.grp>summary::before{content:'+';font-family:var(--fm);color:var(--ll-blue);font-weight:700;width:9px}
+details.grp[open]>summary::before{content:'–'}
+details.grp>summary .hint{margin-left:auto;font-family:var(--fm);font-size:10px;color:var(--ink-400);font-weight:400}
+.grp-body{padding:8px 16px 14px}
+details.sub{border:1px solid var(--ink-100);margin:6px 0}
+details.sub>summary{padding:8px 11px;font-family:var(--fd);font-weight:600;font-size:12px;cursor:pointer;
+  list-style:none;display:flex;gap:7px;align-items:center;background:#fff}
+details.sub>summary::-webkit-details-marker{display:none}
+details.sub>summary .tagn{font-family:var(--fm);font-size:9px;padding:1px 5px;border-radius:2px}
+details.sub>summary .mini{margin-left:auto;font-family:var(--fm);font-size:9.5px;color:var(--ink-400)}
+.sub-body{padding:4px 11px 10px;background:var(--ink-000)}
+
+.fld{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dotted var(--ink-100)}
+.fld:last-child{border-bottom:none}
+.fld label{flex:1;font-size:12px;color:var(--ink-700);line-height:1.25}
+.fld input,.fld select{width:96px;text-align:right;font-family:var(--fm);font-size:12px;padding:4px 6px;
+  border:1px solid var(--ink-200);border-radius:2px;background:var(--blue-050);color:var(--ink-900)}
+.fld select{text-align:left}
+.fld input:focus,.fld select:focus{outline:2px solid var(--ll-blue);outline-offset:-1px;background:#fff}
+.fld .u{font-family:var(--fm);font-size:10px;color:var(--ink-400);width:40px}
+.derived{font-family:var(--fm);font-size:10.5px;color:var(--ink-500);background:var(--ink-050);
+  padding:7px 9px;margin-top:8px;line-height:1.55}
+.derived b{color:var(--ink-800);font-weight:500}
+.derived .bad{color:var(--danger)} .derived .warn{color:var(--warning)} .derived .ok{color:var(--success)}
+.gtot{display:flex;justify-content:space-between;font-family:var(--fm);font-size:10.5px;
+  padding:6px 8px;background:var(--ink-050);margin-bottom:6px;color:var(--ink-600)}
+.gtot b{color:var(--ink-900)}
+
+.card{background:var(--ll-white);border:1px solid var(--ink-100);margin-bottom:16px}
+.card-hd{padding:14px 18px 12px;border-bottom:1px solid var(--ink-100);display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.card-hd h3{font-family:var(--fd);font-size:15.5px;font-weight:800;letter-spacing:-.01em}
+.card-hd p{font-size:11.5px;color:var(--ink-500);flex:1;min-width:180px}
+.card-bd{padding:14px 18px 18px;overflow-x:auto}
+
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{font-family:var(--fd);font-size:10.5px;color:var(--ink-500);text-align:left;padding:6px 7px;
+  border-bottom:2px solid var(--ll-black);font-weight:600;white-space:nowrap}
+th.r,td.r{text-align:right}
+td{padding:6px 7px;border-bottom:1px solid var(--ink-100);color:var(--ink-700);white-space:nowrap}
+td.n{font-family:var(--fm);font-size:11.5px;letter-spacing:-.02em}
+tr.tot td{border-top:2px solid var(--ll-black);border-bottom:none;font-weight:700;background:var(--ink-050);color:var(--ll-black)}
+tr.tot td.n{color:var(--ll-blue)}
+tr.sub2 td{background:var(--blue-050);font-family:var(--fd);font-size:10.5px;font-weight:600;color:var(--ll-blue);padding:4px 7px}
+tr.f2row td{color:var(--ink-600)}
+.badge{display:inline-block;font-family:var(--fd);font-size:10px;font-weight:700;padding:2px 6px;border-radius:2px}
+.badge.ok{background:var(--succ-bg);color:var(--success)}
+.badge.warn{background:var(--warn-bg);color:var(--warning)}
+.badge.bad{background:var(--dang-bg);color:var(--danger)}
+.badge.sara{background:var(--blue-050);color:var(--sara)}
+.badge.heli{background:var(--warn-bg);color:var(--heli)}
+.badge.mix{background:var(--dang-bg);color:var(--danger)}
+.note{font-size:11px;line-height:1.55;color:var(--ink-500);margin-top:11px}
+.note b{color:var(--ink-700)}
+.alert{display:flex;gap:10px;padding:11px 13px;margin-top:12px;font-size:12px;line-height:1.5;border-left:3px solid}
+.alert.bad{background:var(--dang-bg);border-color:var(--danger);color:#7a1a15}
+.alert.warn{background:var(--warn-bg);border-color:var(--warning);color:#7a4c00}
+.alert.ok{background:var(--succ-bg);border-color:var(--success);color:#0a5c34}
+.alert b{font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:800px){.grid2{grid-template-columns:1fr}}
+.sens td.n{font-size:11.5px;padding:5px 7px}
+.sens td.here{background:var(--blue-100);color:var(--ll-blue);font-weight:700}
+.sens td.negv{color:var(--danger)}
+.bar{height:4px;background:var(--ink-100);margin-top:3px;position:relative;min-width:44px}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--ll-blue)}
+.bar i.low{background:var(--warning)} .bar i.neg{background:var(--danger)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;padding:14px 18px;background:var(--ink-000);border-top:1px solid var(--ink-100)}
+.btn{background:var(--ll-black);color:#fff;border:1px solid var(--ll-black);padding:7px 13px;
+  font-family:var(--fd);font-size:12px;font-weight:600;border-radius:2px}
+.btn:hover{background:var(--ll-blue);border-color:var(--ll-blue)}
+.btn.g{background:#fff;color:var(--ink-700);border-color:var(--ink-200)}
+.btn.g:hover{color:var(--ll-blue);border-color:var(--ll-blue)}
+.msg{font-family:var(--fm);font-size:10.5px;color:var(--success);align-self:center}
+textarea{width:100%;height:80px;font-family:var(--fm);font-size:10.5px;border:1px solid var(--ink-200);
+  padding:8px;border-radius:2px;margin-top:8px;resize:vertical}
+.foot{max-width:1660px;margin:0 auto;padding:0 24px 40px;font-size:11px;color:var(--ink-400);line-height:1.6}
+@media print{ .top,.rail,.acts{display:none} .wrap{grid-template-columns:1fr;padding:0} body{background:#fff}
+  .card{break-inside:avoid} }
+</style></head>
+<body>
+
+<div class="top"><div class="top-in">
+  <div class="mark">LUXIA<span>Labs</span></div>
+  <h1><b>Simulador normativo</b> · Sarasota × Las Ninfas · 12 solares</h1>
+  <div class="presets" id="presets"></div>
+</div></div>
+
+<div class="kpis"><div class="kpis-in" id="kpis"></div></div>
+
+<div class="wrap">
+  <aside class="rail">
+    <div class="rail-hd"><h2>Variables</h2>
+      <p>Los solares solo intercambian superficie entre contiguos: el total de cada grupo queda fijo.</p></div>
+    <div id="inputs"></div>
+  </aside>
+
+  <main>
+    <section class="card">
+      <div class="card-hd"><h3>Solares y normativa</h3>
+        <p>Huella construible según retiros y altura; niveles según densidad y tope de altura.</p></div>
+      <div class="card-bd" id="solares"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-hd"><h3>Programa</h3>
+        <p>Lo que resulta de aplicar la normativa a cada proyecto.</p></div>
+      <div class="card-bd" id="programa"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-hd"><h3>Resultado</h3>
+        <p>Misma estructura del Excel: terreno, obra, comisión, soft costs e impuesto de fideicomiso.</p></div>
+      <div class="card-bd" id="pl"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-hd"><h3>Caja de preventa</h3>
+        <p>Cuánto entra durante la obra y qué porción del costo de construcción cubre.</p></div>
+      <div class="card-bd" id="preventa"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-hd"><h3>Sensibilidad</h3>
+        <p>Precio de venta (columnas) contra costo de construcción (filas).</p></div>
+      <div class="card-bd" id="sens"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-hd"><h3>Escenarios guardados</h3>
+        <p>Se pierden al cerrar la página: exportá el JSON para conservarlos.</p></div>
+      <div class="card-bd" id="escenarios"></div>
+      <div class="acts">
+        <button class="btn" onclick="saveScenario()">Guardar escenario actual</button>
+        <button class="btn g" onclick="copySummary()">Copiar resumen</button>
+        <button class="btn g" onclick="exportJSON()">Exportar JSON</button>
+        <button class="btn g" onclick="toggleImport()">Importar JSON</button>
+        <button class="btn g" onclick="window.print()">Imprimir / PDF</button>
+        <span class="msg" id="msg"></span>
+      </div>
+      <div class="card-bd" id="importBox" style="display:none;padding-top:0">
+        <textarea id="importTxt" placeholder="Pegá acá el JSON exportado y presioná Cargar"></textarea>
+        <button class="btn g" onclick="importJSON()" style="margin-top:8px">Cargar</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="foot" id="foot"></div>
+
+<script>
+/* ==================== NORMATIVA ==================== */
+const NORMAS = {
+  sarasota:{ id:'sarasota', nombre:'Av. Sarasota · AM', corto:'Sarasota', maxNiveles:15, densidad:1600 },
+  helios:{ id:'helios', nombre:'C/ Helios · MR', corto:'Helios', maxNiveles:6, densidad:1000 }
+};
+/* Ocupación del suelo derivada de los retiros:
+   hasta 9 niveles  → frontal 5.00 · laterales y posterior 3.00 (2do frente 3.00)
+   10 a 15 niveles  → frontal 7.00 · laterales y posterior 2.80 (2do frente 4.20)          */
+function ocupacionNorma(uso, suelo, banda){
+  if (uso==='corporativo') return suelo > 2000 ? 0.60 : 0.58;   /* <2,000 m²: supuesto, por confirmar */
+  if (banda==='alta') return suelo < 1000 ? 0.54 : 0.58;
+  return suelo <= 1000 ? 0.63 : 0.66;
+}
+const CIRC = { corporativo:0.25, condohotel:0.17, residencial:0.17 };
+const USOS = { corporativo:'Corporativo', condohotel:'Condohotel', residencial:'Residencial' };
+
+/* ==================== ESTADO INICIAL ==================== */
+const GRUPOS = [
+  { id:'G1', nombre:'Solares 1, 2 y 3', solares:['t1','t2','t3'] },
+  { id:'G2', nombre:'Solares 4, 5 y 6', solares:['t4','t5','t6'] },
+  { id:'G3', nombre:'Solares 7 y 8', solares:['t78'] },
+  { id:'G4', nombre:'Solares 9, 10, 11 y 12', solares:['t910','t11','t12'] }
+];
+const INICIAL = {
+  parcelas:{
+    t1:{ nombre:'Terreno 1', area:1112, areaBase:1112, norma:'sarasota', grupo:'G1' },
+    t2:{ nombre:'Terreno 2', area:893,  areaBase:893,  norma:'sarasota', grupo:'G1' },
+    t3:{ nombre:'Terreno 3', area:893,  areaBase:893,  norma:'helios',   grupo:'G1' },
+    t4:{ nombre:'Terreno 4', area:827,  areaBase:827,  norma:'sarasota', grupo:'G2' },
+    t5:{ nombre:'Terreno 5', area:830,  areaBase:830,  norma:'sarasota', grupo:'G2' },
+    t6:{ nombre:'Terreno 6', area:850,  areaBase:850,  norma:'sarasota', grupo:'G2' },
+    t78:{ nombre:'Terrenos 7 y 8', area:1200, areaBase:1200, norma:'sarasota', grupo:'G3' },
+    t910:{nombre:'Terrenos 9 y 10', area:2330, areaBase:2330, norma:'sarasota', grupo:'G4' },
+    t11:{ nombre:'Terreno 11', area:990,  areaBase:990,  norma:'helios', grupo:'G4' },
+    t12:{ nombre:'Terreno 12', area:1930, areaBase:1930, norma:'helios', grupo:'G4' }
+  },
+  proyectos:[
+    { id:'corp',  nombre:'Torre corporativa', solares:['t1','t2'], uso:'corporativo', fase:'F1', pv:'si',
+      unidPiso:0, habUnidad:0, m2Parq:30, parqSot:70, sotBase:6.70,
+      nivModo:'manual', nivMan:15, ocupModo:'auto', ocupMan:0.6234, normaSel:'auto', maxNivOv:0, densOv:0 },
+    { id:'hotel', nombre:'Condohotel', solares:['t3'], uso:'condohotel', fase:'F1', pv:'si',
+      unidPiso:6, habUnidad:3, parqUnid:2, parqSot:23, sotBase:2.61,
+      nivModo:'auto', nivMan:5, ocupModo:'auto', ocupMan:0.6495, normaSel:'auto', maxNivOv:0, densOv:0 },
+    { id:'r4', nombre:'Residencial T4', solares:['t4'], uso:'residencial', fase:'F1', pv:'si',
+      unidPiso:3, habUnidad:4.667, parqUnid:2, parqSot:21, sotBase:2.69,
+      nivModo:'auto', nivMan:9.4, ocupModo:'auto', ocupMan:0.5441, normaSel:'auto', maxNivOv:0, densOv:0 },
+    { id:'r5', nombre:'Residencial T5', solares:['t5'], uso:'residencial', fase:'F2', pv:'si',
+      unidPiso:3, habUnidad:4.667, parqUnid:2, parqSot:21, sotBase:2.69,
+      nivModo:'auto', nivMan:9.4, ocupModo:'auto', ocupMan:0.5482, normaSel:'auto', maxNivOv:0, densOv:0 },
+    { id:'r6', nombre:'Residencial T6', solares:['t6'], uso:'residencial', fase:'F2', pv:'si',
+      unidPiso:3, habUnidad:4.667, parqUnid:2, parqSot:21, sotBase:2.71,
+      nivModo:'auto', nivMan:9.5, ocupModo:'auto', ocupMan:0.5529, normaSel:'auto', maxNivOv:0, densOv:0 },
+    { id:'r78', nombre:'Residencial T7-8', solares:['t78'], uso:'residencial', fase:'F2', pv:'si',
+      unidPiso:5, habUnidad:4.4, parqUnid:2, parqSot:37, sotBase:2.30,
+      nivModo:'auto', nivMan:8.5, ocupModo:'auto', ocupMan:0.5667, normaSel:'auto', maxNivOv:0, densOv:0 },
+    { id:'r910', nombre:'Residencial T9-10', solares:['t910'], uso:'residencial', fase:'F2', pv:'si',
+      unidPiso:10, habUnidad:4.4, parqUnid:2, parqSot:82, sotBase:2.05,
+      nivModo:'auto', nivMan:8.4, ocupModo:'auto', ocupMan:0.5880, normaSel:'auto', maxNivOv:0, densOv:0 },
+    { id:'r11', nombre:'Residencial T11', solares:['t11'], uso:'residencial', fase:'F2', pv:'si',
+      unidPiso:5, habUnidad:3.4, parqUnid:2, parqSot:28, sotBase:1.96,
+      nivModo:'auto', nivMan:5.5, ocupModo:'auto', ocupMan:0.6263, normaSel:'auto', maxNivOv:0, densOv:0 },
+    { id:'r12', nombre:'Residencial T12', solares:['t12'], uso:'residencial', fase:'F2', pv:'si',
+      unidPiso:12, habUnidad:3.5, parqUnid:2, parqSot:66, sotBase:1.64,
+      nivModo:'auto', nivMan:4.5, ocupModo:'auto', ocupMan:0.6788, normaSel:'auto', maxNivOv:0, densOv:0 }
+  ],
+  precios:{ corporativo:4000, condohotel:3000, residencial:2800 },
+  costos:{ corporativo:1700, condohotel:1500, residencial:1500 },
+  preventa:{ corporativo:{pct:0,desc:0,cobro:0}, condohotel:{pct:0,desc:0,cobro:0}, residencial:{pct:0,desc:0,cobro:0} },
+  fin:{ precioSuelo:2350, comision:0.05, soft:0.05, imp:0.10, costoSotano:0,
+        circCorp:0.25, circRes:0.17, varPrecio:0, varCosto:0 }
+};
+const clone = o => JSON.parse(JSON.stringify(o));
+
+/* ==================== MOTOR ==================== */
+function calcProyecto(p, s){
+  const kP = 1 + s.fin.varPrecio, kC = 1 + s.fin.varCosto;
+  const sol = p.solares.map(id=>s.parcelas[id]).filter(Boolean);
+  const suelo = sol.reduce((a,b)=>a+b.area,0);
+  const normasPresentes = [...new Set(sol.map(x=>x.norma))];
+  let normaId;
+  if (p.normaSel!=='auto') normaId = p.normaSel;
+  else if (normasPresentes.length===1) normaId = normasPresentes[0];
+  else {
+    const por = {};
+    sol.forEach(x=>por[x.norma]=(por[x.norma]||0)+x.area);
+    normaId = Object.keys(por).sort((a,b)=>por[b]-por[a])[0];
+  }
+  const norma = NORMAS[normaId];
+  const mixto = normasPresentes.length>1;
+  /* superficie recibida desde solares de otra normativa */
+  let cruzado = 0;
+  sol.forEach(x=>{ if (x.area>x.areaBase && x.norma!==normaId) cruzado += x.area-x.areaBase; });
+  sol.forEach(x=>{ if (x.area>x.areaBase && x.norma===normaId) {
+    /* el excedente vino de algún vecino; si el vecino es de otra norma lo marca el grupo */ } });
+
+  const maxNiv = p.maxNivOv>0 ? p.maxNivOv : norma.maxNiveles;
+  const dens = p.densOv>0 ? p.densOv : norma.densidad;
+  const habPermitidos = suelo/10000*dens;
+  const circ = p.uso==='corporativo' ? s.fin.circCorp : s.fin.circRes;
+  const ocupSupuesta = (p.uso==='corporativo' && suelo<=2000 && p.ocupModo==='auto');
+
+  const evalBanda = (banda) => {
+    if (banda==='alta' && maxNiv < 10) return null;
+    const occ = p.ocupModo==='manual' ? p.ocupMan : ocupacionNorma(p.uso, suelo, banda);
+    const huella = suelo*occ;
+    const huellaVend = huella*(1-circ);
+    let habPiso = 0, nivDens = Infinity;
+    if (p.uso!=='corporativo'){
+      habPiso = p.unidPiso * p.habUnidad;
+      nivDens = habPiso>0 ? habPermitidos/habPiso : Infinity;
+    }
+    /* un nivel 10 empezado ya obliga a los retiros de la banda alta: la banda la fija ceil(niveles) */
+    const bandaDe = n => Math.ceil(n-1e-9) <= 9 ? 'baja' : 'alta';
+    let niv;
+    if (p.nivModo==='manual'){
+      niv = p.nivMan;
+      if (bandaDe(niv) !== banda) return null;
+    } else {
+      niv = Math.min(maxNiv, nivDens);
+      if (banda==='baja') niv = Math.min(niv, 9);
+      else if (bandaDe(niv) !== 'alta') return null;
+    }
+    if (niv <= 0) return null;
+    return { banda, occ, huella, huellaVend, habPiso, nivDens, niveles:niv,
+             vendible: huellaVend*niv };
+  };
+  let opciones = ['baja','alta'].map(evalBanda).filter(Boolean);
+  if (!opciones.length){
+    /* niveles fijados a mano por encima del tope de altura: se respeta el número y se marca fuera de norma */
+    const niv = p.nivModo==='manual' ? p.nivMan : Math.min(9, maxNiv);
+    const banda = Math.ceil(niv-1e-9) <= 9 ? 'baja' : 'alta';
+    const occ = p.ocupModo==='manual' ? p.ocupMan : ocupacionNorma(p.uso, suelo, banda);
+    const huella = suelo*occ, huellaVend = huella*(1-circ);
+    const habPiso = p.uso==='corporativo' ? 0 : p.unidPiso*p.habUnidad;
+    opciones = [{ banda, occ, huella, huellaVend, habPiso,
+                  nivDens: habPiso>0? habPermitidos/habPiso : Infinity,
+                  niveles:niv, vendible: huellaVend*niv }];
+  }
+  const best = opciones.reduce((a,b)=> b.vendible>a.vendible ? b : a);
+
+  const o = { ...p, suelo, solaresDet:sol, norma, normaId, mixto, cruzado, maxNiv, dens,
+              habPermitidos, circ, ocupSupuesta, ...best, opciones:opciones.length };
+  o.unidades = p.uso==='corporativo' ? null : p.unidPiso*o.niveles;
+  o.m2Unidad = p.unidPiso>0 ? o.huellaVend/p.unidPiso : 0;
+  o.habModelados = p.uso==='corporativo' ? 0 : o.habPiso*o.niveles;
+  o.holgura = p.uso==='corporativo' ? Infinity : o.habPermitidos - o.habModelados;
+  o.nivelesTope = Math.min(maxNiv, o.nivDens);
+  o.habPisoMax = o.niveles>0 ? o.habPermitidos/o.niveles : 0;
+  o.m2PorHab = o.habModelados>0 ? o.vendible/o.habModelados : 0;
+  o.parqueos = p.uso==='corporativo' ? o.vendible/(p.m2Parq||30) : o.unidades*(p.parqUnid||2);
+  o.sotanos = p.parqSot>0 ? o.parqueos/p.parqSot : 0;
+  o.sobreAltura = o.niveles > maxNiv + 1e-6;
+
+  /* --- economía --- */
+  const precio = (s.precios[p.uso]||0)*kP;
+  const pv = p.pv==='no' ? {pct:0,desc:0,cobro:0} : (s.preventa[p.uso] || {pct:0,desc:0,cobro:0});
+  o.precioEfectivo = precio*(1 - pv.pct*pv.desc);
+  o.ingresos = o.vendible*o.precioEfectivo;
+  o.cTerreno = -suelo*s.fin.precioSuelo;
+  o.cObra = -o.vendible*(s.costos[p.uso]||0)*kC;
+  o.sotExtra = Math.max(0, Math.ceil(o.sotanos-1e-9) - Math.ceil((p.sotBase||0)-1e-9));
+  o.cSotano = -o.sotExtra*s.fin.costoSotano;
+  o.cComision = -o.ingresos*s.fin.comision;
+  o.cSoft = -o.ingresos*s.fin.soft;
+  o.costos = o.cTerreno+o.cObra+o.cSotano+o.cComision+o.cSoft;
+  o.bruta = o.ingresos+o.costos;
+  o.impuestos = -o.bruta*s.fin.imp;
+  o.neta = o.bruta+o.impuestos;
+  o.margenNeto = o.ingresos? o.neta/o.ingresos : 0;
+  o.netaM2 = o.vendible? o.neta/o.vendible : 0;
+  o.cajaPreventa = o.vendible*pv.pct*precio*(1-pv.desc)*pv.cobro;
+  o.coberturaObra = o.cObra? o.cajaPreventa/-o.cObra : 0;
+  o.unidPreventa = (o.unidades||0)*pv.pct;
+  o.netaPorSuelo = suelo? o.neta/suelo : 0;
+  o.vendPorSuelo = suelo? o.vendible/suelo : 0;
+  return o;
+}
+function calc(s){
+  const P = s.proyectos.map(p=>calcProyecto(p,s));
+  const agg = (arr)=>{
+    const o = {};
+    ['suelo','vendible','huella','ingresos','cTerreno','cObra','cSotano','cComision','cSoft',
+     'costos','bruta','impuestos','neta','cajaPreventa','parqueos','habPermitidos','habModelados']
+      .forEach(k=>o[k]=arr.reduce((a,b)=>a+(b[k]||0),0));
+    o.unidades = arr.reduce((a,b)=>a+(b.unidades||0),0);
+    o.sotanos = arr.reduce((a,b)=>a+Math.ceil((b.sotanos||0)-1e-9),0);
+    o.margenNeto = o.ingresos? o.neta/o.ingresos:0;
+    o.netaM2 = o.vendible? o.neta/o.vendible:0;
+    o.ratio = o.suelo? o.vendible/o.suelo:0;
+    return o;
+  };
+  const byId = {}; P.forEach(p=>byId[p.id]=p);
+  return { P, byId, f1:agg(P.filter(p=>p.fase==='F1')), f2:agg(P.filter(p=>p.fase==='F2')), total:agg(P) };
+}
+const PASOS = [-0.10,-0.05,0,0.05,0.10];
+const sens = (s) => PASOS.map(vc=>PASOS.map(vp=>
+  calc({...s, fin:{...s.fin, varPrecio:vp, varCosto:vc}}).total));
+
+/* ==================== ESCENARIOS BASE ==================== */
+/* la presentación: huellas y niveles fijados a mano, para reconciliar con el Excel */
+const PRESENTACION = {
+  corp:{nivModo:'manual',nivMan:15,ocupModo:'manual',ocupMan:1250/2005},
+  hotel:{nivModo:'manual',nivMan:5,ocupModo:'manual',ocupMan:580/893,unidPiso:6,habUnidad:3},
+  r4:{nivModo:'manual',nivMan:9.4,ocupModo:'manual',ocupMan:450/827},
+  r5:{nivModo:'manual',nivMan:9.4,ocupModo:'manual',ocupMan:455/830},
+  r6:{nivModo:'manual',nivMan:9.5,ocupModo:'manual',ocupMan:470/850},
+  r78:{nivModo:'manual',nivMan:8.5,ocupModo:'manual',ocupMan:680/1200},
+  r910:{nivModo:'manual',nivMan:8.4,ocupModo:'manual',ocupMan:1370/2330},
+  r11:{nivModo:'manual',nivMan:5.5,ocupModo:'manual',ocupMan:620/990},
+  r12:{nivModo:'manual',nivMan:4.5,ocupModo:'manual',ocupMan:1310/1930}
+};
+function estadoPresentacion(){
+  const s = clone(INICIAL);
+  s.proyectos.forEach(p=>{ const o = PRESENTACION[p.id]; if (o) Object.assign(p,o); });
+  return s;
+}
+function estadoNormativa(){ return clone(INICIAL); }
+function estadoPedido(){
+  /* corporativo reducido, condohotel ampliado con suelo del T2, T4 a 15 niveles */
+  const s = clone(INICIAL);
+  s.parcelas.t2.area = 388;      /* cede 505 m² al T3 */
+  s.parcelas.t3.area = 1398;
+  const P = id => s.proyectos.find(p=>p.id===id);
+  P('hotel').normaSel = 'helios';
+  P('hotel').unidPiso = 9;
+  P('r4').nivModo = 'manual'; P('r4').nivMan = 15; P('r4').unidPiso = 2; P('r4').habUnidad = 4;
+  s.proyectos.filter(x=>x.fase==='F2').forEach(x=>x.pv='no');
+  s.preventa.condohotel = {pct:0.5, desc:0.06, cobro:0.35};
+  s.preventa.residencial = {pct:0.3, desc:0.10, cobro:0.30};
+  s.fin.costoSotano = 1000000;
+  return s;
+}
+const PRESETS = {
+  normativa:{ nombre:'Normativa aplicada', fn:estadoNormativa,
+    desc:'Cada solar rinde lo que permiten los retiros, la densidad y el tope de altura' },
+  presentacion:{ nombre:'Base presentación', fn:estadoPresentacion,
+    desc:'Huellas y niveles tal como se presentaron: reconcilia con el Excel de la clienta' },
+  pedido:{ nombre:'Pedido del cliente', fn:estadoPedido,
+    desc:'505 m² del T2 al T3, condohotel ampliado con preventa y T4 a 15 niveles con 2 unidades por planta' }
+};
+
+/* ==================== FORMATO ==================== */
+const nf = (v,d=0)=> (v===null||v===undefined||!isFinite(v)) ? '—'
+  : v.toLocaleString('es-DO',{minimumFractionDigits:d,maximumFractionDigits:d});
+const money = v => v<0 ? '('+nf(Math.abs(v))+')' : nf(v);
+const mm = v => (v/1e6).toLocaleString('es-DO',{minimumFractionDigits:1,maximumFractionDigits:1});
+const pct = (v,d=1)=> isFinite(v)? (v*100).toFixed(d)+'%' : '—';
+
+/* ==================== ESTADO ==================== */
+let state = estadoNormativa();
+let activePreset = 'normativa';
+const BASELINE = calc(estadoPresentacion());
+let escenarios = [];
+
+/* ==================== INPUTS ==================== */
+function setVal(path, v){
+  const k = path.split('.'); const last = k.pop();
+  k.reduce((a,x)=> Array.isArray(a)? a.find(o=>o.id===x) : a[x], state)[last] = v;
+}
+function onInput(el){
+  const kind = el.dataset.kind;
+  let v = kind==='str' ? el.value : parseFloat(el.value);
+  if (kind!=='str' && isNaN(v)) return;
+  if (kind==='pct') v = v/100;
+  setVal(el.dataset.path, v);
+  activePreset = null; renderPresets(); render();
+}
+function onArea(el){
+  const v = parseFloat(el.value); if (isNaN(v)||v<0) return;
+  const id = el.dataset.parcela, donante = document.getElementById('don-'+id).value;
+  const P = state.parcelas, delta = v - P[id].area;
+  if (donante && P[donante]){
+    if (P[donante].area - delta < 0){ flash('El solar '+P[donante].nombre+' no tiene esa superficie', true);
+      el.value = P[id].area; return; }
+    P[donante].area -= delta;
+  }
+  P[id].area = v;
+  activePreset = null; buildInputs(); renderPresets(); render();
+}
+function fld(label, path, unit, step, kind, opts){
+  const cur = path.split('.').reduce((a,x)=> Array.isArray(a)? a.find(o=>o.id===x) : a[x], state);
+  if (kind==='sel'){
+    return `<div class="fld"><label>${label}</label>
+      <select data-path="${path}" data-kind="str" onchange="onInput(this)">
+        ${opts.map(o=>`<option value="${o[0]}" ${cur===o[0]?'selected':''}>${o[1]}</option>`).join('')}
+      </select><span class="u"></span></div>`;
+  }
+  const val = kind==='pct' ? +(cur*100).toFixed(2) : cur;
+  return `<div class="fld"><label>${label}</label>
+    <input type="number" step="${step}" value="${val}" data-path="${path}" data-kind="${kind||'num'}"
+      oninput="onInput(this)"><span class="u">${unit||''}</span></div>`;
+}
+function buildInputs(){
+  const R = calc(state);
+  let html = '';
+
+  /* --- solares --- */
+  html += `<details class="grp" open><summary>Solares y traspasos<span class="hint">11,855 m² fijos</span></summary>
+    <div class="grp-body">`;
+  GRUPOS.forEach(g=>{
+    const tot = g.solares.reduce((a,id)=>a+state.parcelas[id].area,0);
+    const base = g.solares.reduce((a,id)=>a+state.parcelas[id].areaBase,0);
+    const normas = [...new Set(g.solares.map(id=>state.parcelas[id].norma))];
+    html += `<div class="gtot"><span>${g.nombre}${normas.length>1?' · dos normativas':''}</span>
+      <b>${nf(tot)} / ${nf(base)} m²</b></div>`;
+    g.solares.forEach(id=>{
+      const p = state.parcelas[id];
+      const otros = g.solares.filter(x=>x!==id);
+      const cambiado = Math.abs(p.area-p.areaBase)>0.01;
+      html += `<div class="fld"><label>${p.nombre}
+          <i><span class="badge ${p.norma==='sarasota'?'sara':'heli'}">${NORMAS[p.norma].corto}</span>
+          ${cambiado? `<span style="color:var(--warning)">${p.area>p.areaBase?'+':''}${nf(p.area-p.areaBase)} m²</span>`:''}</i></label>
+        <input type="number" step="1" value="${p.area}" data-parcela="${id}" oninput="onArea(this)">
+        <span class="u">m²</span></div>`;
+      if (otros.length) html += `<div class="fld" style="padding-top:0"><label style="font-size:11px;color:var(--ink-400)">compensar con</label>
+        <select id="don-${id}" style="width:140px">${otros.map(o=>{
+          const cruza = state.parcelas[o].norma!==p.norma;
+          return `<option value="${o}">${state.parcelas[o].nombre}${cruza?' ⚠ otra norma':''}</option>`;
+        }).join('')}</select></div>`;
+      else html += `<div class="fld" style="padding-top:0"><label style="font-size:11px;color:var(--ink-400)">
+        sin vecinos en el grupo: superficie fija</label></div>`;
+    });
+  });
+  html += `</div></details>`;
+
+  /* --- proyectos --- */
+  html += `<details class="grp" open><summary>Proyectos<span class="hint">${state.proyectos.length}</span></summary><div class="grp-body">`;
+  state.proyectos.forEach(p=>{
+    const r = R.byId[p.id];
+    const est = p.uso==='corporativo' ? (r.sobreAltura?'bad':'ok')
+              : (r.holgura < -1 ? 'bad' : (r.holgura < 0 ? 'warn':'ok'));
+    html += `<details class="sub"><summary>
+      <span class="tagn badge ${r.normaId==='sarasota'?'sara':'heli'}">${r.norma.corto}</span>
+      ${p.nombre}<span class="mini badge ${est}">${nf(r.niveles,1)} niv · ${nf(r.vendible,0)} m²</span></summary>
+      <div class="sub-body">
+      ${fld('Uso','proyectos.'+p.id+'.uso','','','sel',[['corporativo','Corporativo'],['condohotel','Condohotel'],['residencial','Residencial']])}
+      ${fld('Fase','proyectos.'+p.id+'.fase','','','sel',[['F1','Fase 1'],['F2','Fase 2']])}
+      ${fld('Aplica preventa','proyectos.'+p.id+'.pv','','','sel',[['si','Sí'],['no','No']])}
+      ${p.uso!=='corporativo' ? `
+        ${fld('Unidades por planta','proyectos.'+p.id+'.unidPiso','ud',0.5)}
+        ${fld('Habitantes por unidad','proyectos.'+p.id+'.habUnidad','hab',0.1)}
+        ${fld('Parqueos por unidad','proyectos.'+p.id+'.parqUnid','parq',0.25)}` : `
+        ${fld('Un parqueo cada','proyectos.'+p.id+'.m2Parq','m²',1)}`}
+      ${fld('Parqueos por sótano','proyectos.'+p.id+'.parqSot','parq',1)}
+      ${fld('Sótanos de referencia','proyectos.'+p.id+'.sotBase','niv',0.01)}
+      ${fld('Niveles','proyectos.'+p.id+'.nivModo','','','sel',[['auto','Automático (normativa)'],['manual','Manual']])}
+      ${p.nivModo==='manual'? fld('Niveles fijados','proyectos.'+p.id+'.nivMan','niv',0.1):''}
+      ${fld('Ocupación','proyectos.'+p.id+'.ocupModo','','','sel',[['auto','Automática (retiros)'],['manual','Manual']])}
+      ${p.ocupModo==='manual'? fld('Ocupación fijada','proyectos.'+p.id+'.ocupMan','%',0.5,'pct'):''}
+      ${fld('Normativa','proyectos.'+p.id+'.normaSel','','','sel',[['auto','Según los solares'],['sarasota','Av. Sarasota · 15 niv · 1,600'],['helios','C/ Helios · 6 niv · 1,000']])}
+      ${fld('Tope de niveles (override)','proyectos.'+p.id+'.maxNivOv','niv',1)}
+      ${fld('Densidad (override)','proyectos.'+p.id+'.densOv','hab/Ha',50)}
+      <div class="derived">
+        Suelo <b>${nf(r.suelo)} m²</b> · ocupación <b>${pct(r.occ)}</b> (banda ${r.banda==='alta'?'10–15':'≤9'} niveles)
+        · huella <b>${nf(r.huella,0)} m²</b> → vendible de planta <b>${nf(r.huellaVend,1)} m²</b><br>
+        ${p.uso==='corporativo'
+          ? `Vendible <b>${nf(r.vendible,0)} m²</b> · parqueos <b>${nf(r.parqueos,0)}</b> · sótanos <b>${r.sotanos.toFixed(2)}</b>`
+          : `Unidad promedio <b>${nf(r.m2Unidad,1)} m²</b> · <b>${nf(r.habPiso,1)}</b> hab/planta ·
+             densidad <span class="${r.holgura<0?'bad':'ok'}">${nf(r.habModelados,1)} de ${nf(r.habPermitidos,1)} hab</span><br>
+             Tope: <b>${nf(r.nivelesTope,2)}</b> niveles (altura ${r.maxNiv} · densidad ${nf(r.nivDens,2)})
+             · para ${nf(r.niveles,1)} niveles hacen falta <b>${nf(r.habPisoMax,2)}</b> hab/planta`}
+        ${r.mixto? `<br><span class="warn">Reúne solares de dos normativas: se aplica ${r.norma.nombre}.</span>`:''}
+        ${r.ocupSupuesta? `<br><span class="warn">Corporativo bajo 2,000 m²: ocupación 58% supuesta, por confirmar.</span>`:''}
+      </div></div></details>`;
+  });
+  html += `</div></details>`;
+
+  /* --- precios --- */
+  html += `<details class="grp" open><summary>Precios, costos y cargas</summary><div class="grp-body">
+    ${fld('Precio del suelo','fin.precioSuelo','US$/m²',10)}
+    ${fld('Venta · corporativo','precios.corporativo','US$/m²',50)}
+    ${fld('Venta · condohotel','precios.condohotel','US$/m²',50)}
+    ${fld('Venta · residencial','precios.residencial','US$/m²',50)}
+    ${fld('Obra · corporativo','costos.corporativo','US$/m²',25)}
+    ${fld('Obra · condohotel','costos.condohotel','US$/m²',25)}
+    ${fld('Obra · residencial','costos.residencial','US$/m²',25)}
+    ${fld('Circulación · corporativo','fin.circCorp','%',1,'pct')}
+    ${fld('Circulación · residencial','fin.circRes','%',1,'pct')}
+    ${fld('Comisión de venta','fin.comision','%',0.5,'pct')}
+    ${fld('Soft costs','fin.soft','%',0.5,'pct')}
+    ${fld('Impuesto fideicomiso','fin.imp','%',0.5,'pct')}
+    ${fld('Costo por sótano adicional','fin.costoSotano','US$',50000)}
+    <div class="derived" id="d-fin"></div></div></details>`;
+
+  /* --- preventa --- */
+  html += `<details class="grp"><summary>Preventa</summary><div class="grp-body">
+    ${['condohotel','residencial','corporativo'].map(u=>`
+      <div class="gtot"><span>${USOS[u]}</span></div>
+      ${fld('Unidades en preventa','preventa.'+u+'.pct','%',5,'pct')}
+      ${fld('Descuento de preventa','preventa.'+u+'.desc','%',1,'pct')}
+      ${fld('Del precio cobrado en obra','preventa.'+u+'.cobro','%',5,'pct')}`).join('')}
+    <div class="derived" id="d-prev"></div></div></details>`;
+
+  document.getElementById('inputs').innerHTML = html;
+}
+function renderPresets(){
+  document.getElementById('presets').innerHTML = Object.keys(PRESETS).map(k=>
+    `<button class="chip ${activePreset===k?'on':''}" title="${PRESETS[k].desc}"
+      onclick="applyPreset('${k}')">${PRESETS[k].nombre}</button>`).join('')
+    + (activePreset===null? `<button class="chip on" disabled>Escenario libre</button>`:'');
+}
+function applyPreset(k){ state = PRESETS[k].fn(); activePreset = k; buildInputs(); renderPresets(); render(); }
+
+/* ==================== RENDER ==================== */
+function render(){
+  const R = calc(state), B = BASELINE;
+
+  const delta = (a,b,f)=>{ const d=a-b;
+    return Math.abs(d)<0.5 ? `<div class="d">igual que la presentación</div>`
+      : `<div class="d ${d>0?'up':'down'}">${d>0?'▲':'▼'} ${f(Math.abs(d))} vs presentación</div>`; };
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi b"><div class="v">US$${mm(R.total.neta)}<em>M</em></div>
+      <div class="k">Utilidad neta · Fases 1+2</div>${delta(R.total.neta,B.total.neta,v=>'US$'+mm(v)+'M')}</div>
+    <div class="kpi"><div class="v">${pct(R.total.margenNeto)}</div>
+      <div class="k">Margen neto consolidado</div>${delta(R.total.margenNeto*100,B.total.margenNeto*100,v=>v.toFixed(1)+' pp')}</div>
+    <div class="kpi"><div class="v">${nf(R.total.vendible)}<em> m²</em></div>
+      <div class="k">Área vendible total</div>${delta(R.total.vendible,B.total.vendible,v=>nf(v)+' m²')}</div>
+    <div class="kpi b"><div class="v">US$${mm(R.f1.neta)}<em>M</em></div>
+      <div class="k">Utilidad neta · Fase 1</div>${delta(R.f1.neta,B.f1.neta,v=>'US$'+mm(v)+'M')}</div>
+    <div class="kpi"><div class="v">US$${mm(R.total.cajaPreventa)}<em>M</em></div>
+      <div class="k">Caja de preventa en obra</div>${delta(R.total.cajaPreventa,B.total.cajaPreventa,v=>'US$'+mm(v)+'M')}</div>`;
+
+  const dFin = document.getElementById('d-fin');
+  if (dFin) dFin.innerHTML = `Sótanos adicionales sobre la referencia:
+    <b>${R.P.reduce((a,p)=>a+p.sotExtra,0)}</b> niveles → costo
+    <b>US$${mm(-R.P.reduce((a,p)=>a+p.cSotano,0))}M</b>. El costo de obra por m² ya venía todo incluido:
+    dejalo en 0 si no querés cargar el sótano extra aparte.`;
+  const dPrev = document.getElementById('d-prev');
+  if (dPrev) dPrev.innerHTML = `Caja durante la obra <b>US$${mm(R.total.cajaPreventa)}M</b> ·
+    ingresos resignados por el descuento
+    <b>US$${mm(R.P.reduce((a,p)=>{const pv=state.preventa[p.uso];return a+p.vendible*(state.precios[p.uso])*pv.pct*pv.desc;},0))}M</b>`;
+
+  /* --- solares --- */
+  const filaSol = (p)=>{
+    const est = p.uso==='corporativo' ? (p.sobreAltura?['bad','sobre el tope']:['ok','dentro de altura'])
+      : (p.holgura < -1 ? ['bad','excede '+nf(-p.holgura,1)+' hab']
+        : (p.holgura < 0 ? ['warn','al filo'] : ['ok','holgura '+nf(p.holgura,1)+' hab']));
+    return `<tr class="${p.fase==='F2'?'f2row':''}"><td>${p.nombre}
+        <span class="badge ${p.fase==='F1'?'sara':''}" style="${p.fase==='F2'?'background:var(--ink-050);color:var(--ink-500)':''}">${p.fase}</span></td>
+      <td>${p.solaresDet.map(s=>s.nombre.replace('Terrenos ','T').replace('Terreno ','T')).join(' + ')}</td>
+      <td><span class="badge ${p.mixto?'mix':(p.normaId==='sarasota'?'sara':'heli')}">${p.mixto?'mixta → '+p.norma.corto:p.norma.corto}</span></td>
+      <td class="n r">${nf(p.suelo)}</td>
+      <td class="n r">${p.maxNiv}</td>
+      <td class="n r">${pct(p.occ)}${p.ocupModo==='manual'?' <span style="color:var(--warning)">M</span>':''}</td>
+      <td class="n r">${nf(p.huella,0)}</td><td class="n r">${nf(p.huellaVend,1)}</td>
+      <td class="n r">${p.uso==='corporativo'?'—':nf(p.unidPiso,1)}</td>
+      <td class="n r">${p.uso==='corporativo'?'—':nf(p.habPiso,1)}</td>
+      <td class="n r">${p.uso==='corporativo'?'—':nf(p.habPermitidos,1)}</td>
+      <td class="n r">${p.uso==='corporativo'?'—':nf(p.habModelados,1)}</td>
+      <td class="n r">${nf(p.nivelesTope,2)}</td>
+      <td class="n r"><b>${nf(p.niveles,1)}</b>${p.nivModo==='manual'?' <span style="color:var(--warning)">M</span>':''}</td>
+      <td class="r"><span class="badge ${est[0]}">${est[1]}</span></td></tr>`;
+  };
+  const excede = R.P.filter(p=>p.holgura<-1 || p.sobreAltura);
+  const mixtos = R.P.filter(p=>p.mixto);
+  let al = '';
+  if (excede.length) al += `<div class="alert bad"><div><b>${excede.length} proyecto${excede.length>1?'s':''} fuera de norma:</b>
+    ${excede.map(p=>`${p.nombre} — ${p.sobreAltura? `${nf(p.niveles,1)} niveles contra un tope de ${p.maxNiv}`
+      : `${nf(p.habModelados,1)} habitantes contra ${nf(p.habPermitidos,1)} permitidos; con ese producto el tope son ${nf(p.nivelesTope,2)} niveles, o bajar a ${nf(p.habPisoMax,2)} hab/planta`}`).join(' · ')}.</div></div>`;
+  if (mixtos.length) al += `<div class="alert warn"><div><b>Solares de normativas distintas en un mismo proyecto:</b>
+    ${mixtos.map(p=>`${p.nombre} (${p.solaresDet.map(s=>s.nombre+' · '+NORMAS[s.norma].corto).join(', ')}) → se aplica ${p.norma.nombre}`).join(' · ')}.
+    Elegí la normativa en el panel del proyecto; esto necesita validación con Planeamiento Urbano.</div></div>`;
+  if (!al) al = `<div class="alert ok"><div><b>Todos los proyectos quedan dentro de su normativa</b>
+    y ningún proyecto mezcla solares de normativas distintas.</div></div>`;
+
+  document.getElementById('solares').innerHTML = `
+    <table><tr><th>Proyecto</th><th>Solares</th><th>Normativa</th><th class="r">Suelo</th>
+      <th class="r">Máx niv</th><th class="r">Ocupación</th><th class="r">Huella</th><th class="r">Huella vend.</th>
+      <th class="r">Ud/planta</th><th class="r">Hab/planta</th><th class="r">Hab perm.</th><th class="r">Hab mod.</th>
+      <th class="r">Tope niv</th><th class="r">Niveles</th><th class="r">Estado</th></tr>
+      ${R.P.map(filaSol).join('')}
+      <tr class="tot"><td>Total</td><td>12 solares</td><td></td><td class="n r">${nf(R.total.suelo)}</td>
+        <td colspan="2"></td><td class="n r">${nf(R.total.huella,0)}</td><td colspan="3"></td>
+        <td class="n r">${nf(R.total.habPermitidos,0)}</td><td class="n r">${nf(R.total.habModelados,0)}</td>
+        <td colspan="3"></td></tr></table>${al}
+    <p class="note">Ocupación automática según retiros: residencial de 10 a 15 niveles <b>54%</b> bajo 1,000 m² y
+    <b>58%</b> sobre 1,000 m²; hasta 9 niveles <b>63%</b> y <b>66%</b>; corporativo sobre 2,000 m² <b>60%</b>.
+    Huella vendible = huella menos <b>${pct(state.fin.circRes,0)}</b> de circulación en residencial y
+    <b>${pct(state.fin.circCorp,0)}</b> en corporativo. La <b>M</b> marca un valor fijado a mano.
+    El simulador prueba las dos bandas de altura y se queda con la que rinde más área vendible.</p>`;
+
+  /* --- programa --- */
+  document.getElementById('programa').innerHTML = `
+    <table><tr><th>Proyecto</th><th class="r">Suelo</th><th class="r">Niveles</th><th class="r">Vendible (m²)</th>
+      <th class="r">Δ vs present.</th><th class="r">Unidades</th><th class="r">m²/unidad</th>
+      <th class="r">Parqueos</th><th class="r">Sótanos</th><th class="r">m² vend/m² suelo</th></tr>
+      ${R.P.map(p=>{ const b=B.byId[p.id]; const d=b? p.vendible-b.vendible : 0;
+        return `<tr class="${p.fase==='F2'?'f2row':''}"><td>${p.nombre}</td>
+        <td class="n r">${nf(p.suelo)}</td><td class="n r">${nf(p.niveles,1)}</td>
+        <td class="n r">${nf(p.vendible,1)}</td>
+        <td class="n r" style="color:${d>0?'var(--success)':(d<0?'var(--danger)':'var(--ink-400)')}">${b?(d>=0?'+':'')+nf(d,0):'—'}</td>
+        <td class="n r">${p.unidades!==null?nf(p.unidades,1):'oficinas'}</td>
+        <td class="n r">${p.m2Unidad?nf(p.m2Unidad,1):'—'}</td>
+        <td class="n r">${nf(p.parqueos,1)}</td><td class="n r">${p.sotanos.toFixed(2)}</td>
+        <td class="n r">${p.vendPorSuelo.toFixed(2)}</td></tr>`; }).join('')}
+      <tr class="sub2"><td colspan="10">Fase 1</td></tr>
+      <tr><td>Subtotal Fase 1</td><td class="n r">${nf(R.f1.suelo)}</td><td class="n r">—</td>
+        <td class="n r">${nf(R.f1.vendible,1)}</td>
+        <td class="n r">${(R.f1.vendible-B.f1.vendible>=0?'+':'')+nf(R.f1.vendible-B.f1.vendible,0)}</td>
+        <td class="n r">${nf(R.f1.unidades,1)}</td><td class="n r">—</td>
+        <td class="n r">${nf(R.f1.parqueos,1)}</td><td class="n r">${R.f1.sotanos}</td>
+        <td class="n r">${R.f1.ratio.toFixed(2)}</td></tr>
+      <tr class="tot"><td>Total Fases 1+2</td><td class="n r">${nf(R.total.suelo)}</td><td class="n r">—</td>
+        <td class="n r">${nf(R.total.vendible,1)}</td>
+        <td class="n r">${(R.total.vendible-B.total.vendible>=0?'+':'')+nf(R.total.vendible-B.total.vendible,0)}</td>
+        <td class="n r">${nf(R.total.unidades,1)}</td><td class="n r">—</td>
+        <td class="n r">${nf(R.total.parqueos,1)}</td><td class="n r">${R.total.sotanos}</td>
+        <td class="n r">${R.total.ratio.toFixed(2)}</td></tr></table>
+    <p class="note">La última columna es lo que rinde cada solar: ahí se ve el costo real de mover superficie
+    de un uso a otro o de un lado de la manzana al otro.</p>`;
+
+  /* --- P&L --- */
+  const barCell = (p)=>{ const w=Math.max(0,Math.min(1,p.margenNeto/0.40))*100;
+    const c = p.margenNeto<0?'neg':(p.margenNeto<0.12?'low':'');
+    return `<td class="n r">${pct(p.margenNeto)}<div class="bar"><i class="${c}" style="width:${w}%"></i></div></td>`; };
+  const filaPL = (p,cls='')=>`<tr class="${cls}"><td>${p.nombre||''}</td>
+    <td class="n r">${nf(p.vendible,0)}</td>
+    <td class="n r">${p.precioEfectivo?nf(p.precioEfectivo):'—'}</td>
+    <td class="n r">${money(p.ingresos)}</td><td class="n r">${money(p.cTerreno)}</td>
+    <td class="n r">${money(p.cObra)}</td><td class="n r">${money(p.cSotano)}</td>
+    <td class="n r">${money(p.cComision+p.cSoft)}</td><td class="n r">${money(p.bruta)}</td>
+    <td class="n r">${money(p.impuestos)}</td><td class="n r">${money(p.neta)}</td>
+    ${barCell(p)}<td class="n r">${nf(p.netaPorSuelo||0)}</td></tr>`;
+  document.getElementById('pl').innerHTML = `
+    <table><tr><th>Proyecto</th><th class="r">Vendible</th><th class="r">Precio ef.</th><th class="r">Ingresos</th>
+      <th class="r">Terreno</th><th class="r">Obra</th><th class="r">Sótanos</th><th class="r">Com.+soft</th>
+      <th class="r">Bruta</th><th class="r">Impuesto</th><th class="r">Neta</th><th class="r">Margen</th>
+      <th class="r">Neta/m² suelo</th></tr>
+      ${R.P.filter(p=>p.fase==='F1').map(p=>filaPL(p)).join('')}
+      ${filaPL({...R.f1, nombre:'Fase 1', netaPorSuelo:R.f1.suelo?R.f1.neta/R.f1.suelo:0, precioEfectivo:0},'tot')}
+      ${R.P.filter(p=>p.fase==='F2').map(p=>filaPL(p,'f2row')).join('')}
+      ${filaPL({...R.f2, nombre:'Fase 2', netaPorSuelo:R.f2.suelo?R.f2.neta/R.f2.suelo:0, precioEfectivo:0},'tot')}
+      ${filaPL({...R.total, nombre:'Total', netaPorSuelo:R.total.suelo?R.total.neta/R.total.suelo:0, precioEfectivo:0},'tot')}
+    </table>
+    <p class="note">Utilidad antes de costo financiero. El impuesto se recalcula sobre la utilidad bruta de cada
+    escenario en vez de escalarse desde la base, así que las esquinas de la sensibilidad difieren un poco del Excel.</p>`;
+
+  /* --- preventa --- */
+  const conPV = R.P.filter(p=>state.preventa[p.uso].pct>0);
+  const obra = -R.P.reduce((a,p)=>a+p.cObra,0);
+  document.getElementById('preventa').innerHTML = conPV.length ? `
+    <table><tr><th>Proyecto</th><th class="r">Unidades</th><th class="r">En preventa</th>
+      <th class="r">Precio de preventa</th><th class="r">Cobrado en obra</th>
+      <th class="r">Caja en obra</th><th class="r">Cobertura de su obra</th></tr>
+      ${conPV.map(p=>{ const pv=state.preventa[p.uso]; return `<tr><td>${p.nombre}</td>
+        <td class="n r">${p.unidades!==null?nf(p.unidades,1):'por m²'}</td>
+        <td class="n r">${p.unidades!==null?nf(p.unidPreventa,1):nf(p.vendible*pv.pct,0)+' m²'}</td>
+        <td class="n r">${nf(state.precios[p.uso]*(1-pv.desc))}</td>
+        <td class="n r">${pct(pv.cobro,0)}</td><td class="n r">${money(p.cajaPreventa)}</td>
+        <td class="n r">${pct(p.coberturaObra)}</td></tr>`; }).join('')}
+      <tr class="tot"><td>Total</td><td colspan="4"></td>
+        <td class="n r">${money(R.total.cajaPreventa)}</td>
+        <td class="n r">${pct(obra? R.total.cajaPreventa/obra:0)}</td></tr></table>
+    <div class="alert ok"><div>La preventa aporta <b>US$${mm(R.total.cajaPreventa)}M</b> durante la obra,
+      el <b>${pct(obra? R.total.cajaPreventa/obra:0)}</b> del costo de construcción del conjunto
+      (US$${mm(obra)}M).</div></div>
+    <p class="note">Mide capacidad de recaudo, no un flujo mes a mes: no hay cronograma de absorción ni costo financiero.</p>`
+    : `<p class="note" style="margin:0">Todavía no cargaste preventa. Abrí el grupo <b>Preventa</b> del panel izquierdo
+       y poné un porcentaje de unidades para ver cuánta caja genera cada producto antes de terminar la obra.</p>`;
+
+  /* --- sensibilidad --- */
+  const S = sens(state);
+  const hdr = `<tr><th>Costo \\ Precio</th>${PASOS.map(p=>`<th class="r">${p>0?'+':''}${(p*100).toFixed(0)}%</th>`).join('')}</tr>`;
+  const tabla = (fmt)=>`<table class="sens">${hdr}${S.map((r,i)=>`<tr><td class="n">${PASOS[i]>0?'+':''}${(PASOS[i]*100).toFixed(0)}%</td>
+    ${r.map((t,j)=>`<td class="n r ${PASOS[i]===0&&PASOS[j]===0?'here':''} ${t.neta<0?'negv':''}">${fmt(t)}</td>`).join('')}</tr>`).join('')}</table>`;
+  document.getElementById('sens').innerHTML = `<div class="grid2">
+    <div><div class="note" style="margin:0 0 7px">Utilidad neta total · US$ millones</div>${tabla(t=>mm(t.neta))}</div>
+    <div><div class="note" style="margin:0 0 7px">Margen neto total</div>${tabla(t=>pct(t.margenNeto))}</div></div>
+    <p class="note">El costo de terreno se mantiene fijo en los dos ejes. La celda azul es el escenario cargado.</p>`;
+
+  renderEscenarios();
+  document.getElementById('foot').innerHTML = `Luxia Labs · preparado para Marlen Mejía.
+    Normativas: Av. Sarasota AM 1,600 hab/Ha y 15 niveles (solares 1, 2, 4, 5, 6, 7 y 8) ·
+    C/ Helios MR 1,000 hab/Ha y 6 niveles (solares 3, 11 y 12). Retiros: hasta 9 niveles 5.00 frontal,
+    3.00 laterales y posterior; de 10 a 15 niveles 7.00 frontal, 2.80 laterales y posterior; segundo frente
+    en esquina al 60% del principal. El escenario <b>Base presentación</b> reproduce el Excel de la clienta:
+    US$155,420,060 de ingresos y US$31,719,266 de utilidad neta.`;
+}
+
+/* ==================== ESCENARIOS ==================== */
+function saveScenario(){
+  const R = calc(state);
+  escenarios.push({ nombre: activePreset? PRESETS[activePreset].nombre : 'Escenario '+(escenarios.length+1),
+    estado: clone(state), r:{
+      vendible:R.total.vendible, ingresos:R.total.ingresos, neta:R.total.neta, margen:R.total.margenNeto,
+      netaF1:R.f1.neta, caja:R.total.cajaPreventa, unidades:R.total.unidades, sotanos:R.total.sotanos,
+      fuera:R.P.filter(p=>p.holgura<-1||p.sobreAltura).length, mixtos:R.P.filter(p=>p.mixto).length }});
+  flash('Escenario guardado'); render();
+}
+function renderEscenarios(){
+  const h = document.getElementById('escenarios');
+  if (!escenarios.length){ h.innerHTML = `<p class="note" style="margin:0">Ajustá las variables y presioná
+    <b>Guardar escenario actual</b> para ir acumulando los ejercicios y compararlos.</p>`; return; }
+  h.innerHTML = `<table><tr><th>Escenario</th><th class="r">Vendible</th><th class="r">Unidades</th>
+    <th class="r">Ingresos</th><th class="r">Neta F1</th><th class="r">Neta total</th><th class="r">Margen</th>
+    <th class="r">Caja preventa</th><th class="r">Sótanos</th><th class="r">Normativa</th><th></th></tr>
+    ${escenarios.map((e,i)=>`<tr><td>${e.nombre}</td>
+      <td class="n r">${nf(e.r.vendible,0)}</td><td class="n r">${nf(e.r.unidades,0)}</td>
+      <td class="n r">${money(e.r.ingresos)}</td><td class="n r">${money(e.r.netaF1)}</td>
+      <td class="n r">${money(e.r.neta)}</td><td class="n r">${pct(e.r.margen)}</td>
+      <td class="n r">${money(e.r.caja)}</td><td class="n r">${e.r.sotanos}</td>
+      <td class="r"><span class="badge ${e.r.fuera?'bad':(e.r.mixtos?'warn':'ok')}">
+        ${e.r.fuera? e.r.fuera+' fuera' : (e.r.mixtos? e.r.mixtos+' mixto':'ok')}</span></td>
+      <td class="r"><button class="btn g" style="padding:3px 7px;font-size:10.5px"
+        onclick="loadScenario(${i})">Cargar</button></td></tr>`).join('')}</table>`;
+}
+function loadScenario(i){ state = clone(escenarios[i].estado); activePreset=null;
+  buildInputs(); renderPresets(); render(); flash('Escenario cargado'); }
+function exportJSON(){
+  const data = {actual:state, escenarios:escenarios.map(e=>({nombre:e.nombre,estado:e.estado}))};
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download = 'escenarios_sarasota.json'; a.click(); URL.revokeObjectURL(a.href); flash('JSON exportado');
+}
+function toggleImport(){ const b=document.getElementById('importBox');
+  b.style.display = b.style.display==='none'?'block':'none'; }
+function importJSON(){
+  try{
+    const d = JSON.parse(document.getElementById('importTxt').value);
+    if (d.actual) state = d.actual;
+    if (d.escenarios) { escenarios = []; d.escenarios.forEach(e=>{
+      const prev = state; state = e.estado; const R = calc(state);
+      escenarios.push({nombre:e.nombre, estado:e.estado, r:{
+        vendible:R.total.vendible, ingresos:R.total.ingresos, neta:R.total.neta, margen:R.total.margenNeto,
+        netaF1:R.f1.neta, caja:R.total.cajaPreventa, unidades:R.total.unidades, sotanos:R.total.sotanos,
+        fuera:R.P.filter(p=>p.holgura<-1||p.sobreAltura).length, mixtos:R.P.filter(p=>p.mixto).length}});
+      state = prev; }); }
+    activePreset=null; buildInputs(); renderPresets(); render(); flash('Escenarios cargados');
+  }catch(e){ flash('El JSON no se pudo leer', true); }
+}
+function copySummary(){
+  const R = calc(state), L = [];
+  L.push('SARASOTA × LAS NINFAS — escenario simulado');
+  L.push('');
+  R.P.forEach(p=>{
+    L.push(`${p.nombre} (${p.solaresDet.map(s=>s.nombre).join(' + ')}, ${nf(p.suelo)} m², ${p.norma.corto})`);
+    L.push(`   ocupación ${pct(p.occ)} · huella ${nf(p.huella,0)} m² · ${nf(p.niveles,1)} niveles · ${nf(p.vendible,0)} m² vendibles`
+      + (p.unidades!==null? ` · ${nf(p.unidades,1)} unidades de ${nf(p.m2Unidad,0)} m²`:'')
+      + (p.uso!=='corporativo'? ` · ${nf(p.habModelados,1)} de ${nf(p.habPermitidos,1)} hab`:''));
+  });
+  L.push('');
+  L.push(`FASE 1 — ingresos US$${mm(R.f1.ingresos)}M · neta US$${mm(R.f1.neta)}M · margen ${pct(R.f1.margenNeto)}`);
+  L.push(`FASES 1+2 — vendible ${nf(R.total.vendible,0)} m² · ingresos US$${mm(R.total.ingresos)}M · neta US$${mm(R.total.neta)}M · margen ${pct(R.total.margenNeto)}`);
+  if (R.total.cajaPreventa>0) L.push(`Caja de preventa durante obra: US$${mm(R.total.cajaPreventa)}M`);
+  const txt = L.join('\n');
+  const fb = ()=>{ const t=document.getElementById('importTxt');
+    document.getElementById('importBox').style.display='block'; t.value=txt; t.select(); flash('Copiá el texto del cuadro'); };
+  if (navigator.clipboard && navigator.clipboard.writeText)
+    navigator.clipboard.writeText(txt).then(()=>flash('Resumen copiado')).catch(fb);
+  else fb();
+}
+function flash(m,err){ const e=document.getElementById('msg');
+  e.textContent=m; e.style.color= err?'var(--danger)':'var(--success)';
+  setTimeout(()=>{e.textContent='';},2600); }
+
+buildInputs(); renderPresets(); render();
+</script>
+</body></html>
