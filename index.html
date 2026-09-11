@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sarasota × Las Ninfas — Simulador de escenarios · Luxia Labs</title>
+<title>Solar unificado — Sarasota × Las Ninfas · Luxia Labs</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Roboto:ital,wght@0,300;0,400;0,500;0,700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 :root{
   --ll-black:#000; --ll-blue:#1906F5; --blue-soft:#8f9dff;
   --ink-800:#15161A; --ink-700:#232429; --ink-600:#3A3B42; --ink-500:#5C5E66;
   --ink-400:#888A92; --ink-300:#B4B6BD; --ink-200:#D6D7DC; --ink-100:#E8E9ED;
-  --ink-050:#F4F4F7; --ink-000:#FAFAFC; --blue-100:#E5E2FF; --blue-050:#F2F0FF;
+  --ink-050:#F4F4F7; --ink-000:#FAFAFC; --blue-050:#F2F0FF;
   --fd:'Manrope',ui-sans-serif,system-ui,sans-serif;
   --fs:'Roboto',ui-sans-serif,system-ui,sans-serif;
   --fm:'JetBrains Mono',ui-monospace,monospace;
@@ -25,46 +25,68 @@ button{font:inherit;cursor:pointer}
 .hero .shell{padding:26px 22px 30px}
 .mark{font-family:var(--fd);font-weight:800;font-size:17px}
 .mark span{color:var(--blue-soft);font-style:italic;font-weight:600}
-.hero h1{font-family:var(--fd);font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:20px;line-height:1.08}
-.hero p{font-weight:300;color:rgba(255,255,255,.8);max-width:640px;margin-top:10px;font-size:15px}
+.hero h1{font-family:var(--fd);font-size:33px;font-weight:800;letter-spacing:-.02em;margin-top:18px;line-height:1.08}
+.hero p{font-weight:300;color:rgba(255,255,255,.8);max-width:680px;margin-top:10px;font-size:15px}
+.premisa{margin-top:16px;padding:11px 15px;background:rgba(255,255,255,.08);
+  border-left:3px solid var(--blue-soft);font-size:13px;color:rgba(255,255,255,.88);max-width:680px}
+.premisa b{color:#fff;font-weight:700}
 
 .res{background:#fff;border-bottom:1px solid var(--ink-100);position:sticky;top:0;z-index:10;
   box-shadow:0 2px 14px rgba(0,0,0,.05)}
 .res .shell{padding:16px 22px 14px}
-.nums{display:flex;gap:34px;align-items:center;flex-wrap:wrap}
+.nums{display:flex;gap:30px;align-items:center;flex-wrap:wrap}
 .big{display:flex;flex-direction:column}
-.big .v{font-family:var(--fm);font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.big .v{font-family:var(--fm);font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1}
 .big.b .v{color:var(--ll-blue)}
-.big .k{font-size:12px;color:var(--ink-500);margin-top:5px}
-.big .d{font-family:var(--fm);font-size:11px;margin-top:3px}
-.up{color:var(--success)} .down{color:var(--danger)}
-.veredicto{margin-top:14px;font-size:12.5px;line-height:1.45;padding:9px 14px;
-  border-left:3px solid;background:var(--succ-bg);border-color:var(--success);color:#0a5c34}
-.veredicto b{font-weight:700}
+.big.meta .v{color:var(--success)} .big.meta.no .v{color:var(--danger)}
+.big .k{font-size:12px;color:var(--ink-500);margin-top:5px;display:flex;align-items:center;gap:6px}
+.big .d{font-family:var(--fm);font-size:11px;margin-top:3px;color:var(--ink-400)}
+.tag{font-family:var(--fd);font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:2px}
+.tag.si{background:var(--succ-bg);color:var(--success)}
+.tag.no{background:var(--dang-bg);color:var(--danger)}
+.linea{margin-top:14px;font-size:12.5px;line-height:1.45;padding:9px 14px;border-left:3px solid}
+.linea.ok{background:var(--succ-bg);border-color:var(--success);color:#0a5c34}
+.linea.warn{background:var(--warn-bg);border-color:var(--warning);color:#7a4c00}
+.linea.bad{background:var(--dang-bg);border-color:var(--danger);color:#7a1a15}
+.linea b{font-weight:700}
 
-.sec{padding:34px 0 8px}
+.sec{padding:32px 0 8px}
 .sec h2{font-family:var(--fd);font-size:12px;font-weight:700;color:var(--ink-400);letter-spacing:.04em;margin-bottom:16px}
 .dec{background:#fff;border:1px solid var(--ink-100);padding:22px 24px;margin-bottom:14px}
 .dec h3{font-family:var(--fd);font-size:19px;font-weight:800;letter-spacing:-.01em}
-.dec .sub{color:var(--ink-500);font-size:13.5px;margin-top:5px;max-width:680px}
-.split{display:flex;gap:2px;margin:22px 0 10px;min-height:78px}
-.split div{display:flex;flex-direction:column;justify-content:center;padding:12px 15px;color:#fff;overflow:hidden}
-.split .a{background:var(--ll-black)} .split .b{background:var(--warning)}
-.split strong{font-family:var(--fm);font-size:18px;font-weight:700;white-space:nowrap}
-.split em{font-style:normal;font-size:11.5px;opacity:.85;white-space:nowrap;margin-top:2px}
-.split .q{font-size:12px;opacity:.95;margin-top:7px;white-space:nowrap}
+.dec .sub{color:var(--ink-500);font-size:13.5px;margin-top:5px;max-width:700px}
+.torres{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:20px}
+@media (max-width:700px){.torres{grid-template-columns:1fr}}
+.torre{border-top:2px solid var(--ll-black);padding-top:12px}
+.torre.h{border-top-color:var(--ll-blue)}
+.torre .lbl{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.torre .lbl span{font-family:var(--fd);font-weight:800;font-size:15px}
+.torre .lbl b{font-family:var(--fm);font-size:24px;line-height:1}
+.torre .lbl b em{font-style:normal;font-size:12px;color:var(--ink-400);font-weight:400}
+.torre .fija{font-size:11.5px;color:var(--ink-400);margin-bottom:8px}
+.torre .out{font-family:var(--fm);font-size:12px;color:var(--ink-600);margin-top:6px;line-height:1.65}
+.torre .out b{color:var(--ink-900);font-weight:700}
 input[type=range]{width:100%;accent-color:var(--ll-blue);height:26px}
-.ticks{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-400)}
-.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(176px,1fr));gap:10px;margin-top:18px}
+.rng2{accent-color:var(--ll-black)}
+.seg{display:flex;gap:0;margin-top:10px;border:1px solid var(--ink-200);width:fit-content}
+.seg button{background:#fff;border:none;padding:7px 13px;font-family:var(--fd);font-size:11.5px;
+  font-weight:600;color:var(--ink-500);border-right:1px solid var(--ink-200)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--ll-blue);color:#fff}
+.seg button:not(.on):hover{color:var(--ll-blue);background:var(--blue-050)}
+.ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-400)}
+.chks{margin-top:12px;font-size:12.5px;line-height:1.8}
+.chks i{font-style:normal;font-family:var(--fm);font-weight:700;margin-right:6px}
+.si{color:var(--success)} .no{color:var(--danger)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:16px}
 .opt{border:1px solid var(--ink-200);background:#fff;padding:14px 15px;text-align:left;transition:.12s}
 .opt:hover{border-color:var(--ll-blue)}
 .opt.on{border-color:var(--ll-blue);border-width:2px;background:var(--blue-050);padding:13px 14px}
-.opt .t{font-family:var(--fd);font-weight:700;font-size:14px;line-height:1.25}
+.opt .t{font-family:var(--fd);font-weight:700;font-size:14px}
 .opt .d{font-size:11.5px;color:var(--ink-500);margin-top:3px;line-height:1.35}
-.opt .r{font-family:var(--fm);font-size:12px;color:var(--ll-blue);margin-top:9px;font-weight:500}
-.opt.on .r{font-weight:700}
+.opt .r{font-family:var(--fm);font-size:11.5px;margin-top:8px;font-weight:500;color:var(--ll-blue)}
 .supuesto{background:var(--ink-000);border:1px solid var(--ink-100);border-left:3px solid var(--ink-300);
-  padding:16px 20px;margin-bottom:14px;font-size:13.5px;color:var(--ink-600);line-height:1.6}
+  padding:16px 20px;margin-bottom:12px;font-size:13.5px;color:var(--ink-600);line-height:1.6}
 .supuesto b{font-family:var(--fd);color:var(--ink-800);font-weight:700}
 .supuesto .t{font-family:var(--fd);font-size:15px;font-weight:800;color:var(--ink-800);margin-bottom:6px}
 
@@ -87,10 +109,6 @@ td.n{font-family:var(--fm);font-size:12px}
 td.sep,th.sep{border-left:1px solid var(--ink-200)}
 tr.tot td{border-top:2px solid var(--ll-black);border-bottom:none;font-weight:700;background:var(--ink-050)}
 tr.tot td.n{color:var(--ll-blue)}
-.pill{font-family:var(--fd);font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:2px}
-.pill.alt{background:var(--blue-050);color:var(--ll-blue)}
-.pill.den{background:var(--warn-bg);color:var(--warning)}
-.pill.ret{background:var(--ink-050);color:var(--ink-600)}
 .nota{font-size:12px;color:var(--ink-500);line-height:1.55;margin-top:12px}
 .acts{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;align-items:center}
 .btn{background:var(--ll-black);color:#fff;border:1px solid var(--ll-black);padding:10px 17px;
@@ -101,25 +119,29 @@ tr.tot td.n{color:var(--ll-blue)}
 .msg{font-family:var(--fm);font-size:11.5px;color:var(--success)}
 .foot{padding:26px 0 50px;font-size:11.5px;color:var(--ink-400);line-height:1.65}
 @media print{ .res{position:static} .dec,.acts,.btn{display:none} details.det{border:none} details.det>summary{display:none} .det-bd{padding:0} }
-@media (max-width:640px){ .hero h1{font-size:26px} .nums{gap:20px} .big .v{font-size:23px} }
+@media (max-width:640px){ .hero h1{font-size:25px} .nums{gap:18px} .big .v{font-size:22px} }
 </style></head>
 <body>
 
 <div class="hero"><div class="shell">
   <div class="mark">LUXIA<span>Labs</span></div>
-  <h1>Sarasota × Las Ninfas</h1>
-  <p>Dos variables mueven el resultado del conjunto: cómo se reparte la esquina entre oficinas y condohotel,
-     y cómo se comporta el mercado. Todo lo demás queda fijo en los supuestos del estudio.</p>
+  <h1>Solar unificado · dos torres</h1>
+  <p>Terrenos 1, 2 y 3 refundidos en un solo solar de 2,898 m² para que toda la esquina quede bajo la
+     normativa de la avenida Sarasota. Las huellas de los tres edificios son las del estudio y no se tocan:
+     lo único que se mueve son las alturas.</p>
+  <div class="premisa"><b>Premisa a validar con Planeamiento Urbano:</b> el ejercicio asume que la refundición
+    lleva los 2,898 m² a quince niveles y 1,600 habitantes por hectárea. Hoy el Terreno 3 tiene frente a la
+    calle Helios, con tope de seis niveles y mil habitantes por hectárea. Todo lo que sigue depende de eso.</div>
 </div></div>
 
 <div class="res"><div class="shell" id="resumen"></div></div>
 
 <div class="shell">
-  <div class="sec"><h2>Las decisiones</h2><div id="decisiones"></div></div>
+  <div class="sec"><h2>Las alturas</h2><div id="decisiones"></div></div>
   <div class="sec"><h2>El detalle</h2><div id="supuestos"></div><div id="detalle"></div>
     <div class="acts">
       <button class="btn" onclick="guardar()">Guardar este ejercicio</button>
-      <button class="btn g" onclick="reset()">Volver al escenario de partida</button>
+      <button class="btn g" onclick="reset()">Volver al esquema presentado</button>
       <button class="btn g" onclick="window.print()">Imprimir</button>
       <span class="msg" id="msg"></span>
     </div>
@@ -129,322 +151,446 @@ tr.tot td.n{color:var(--ll-blue)}
 </div>
 
 <script>
-/* ==================== NORMATIVA ==================== */
-const NORMAS = {
-  sarasota:{ nombre:'Av. Sarasota', corto:'Sarasota', maxNiveles:15, densidad:1600 },
-  helios:{ nombre:'C/ Helios', corto:'Helios', maxNiveles:6, densidad:1000 }
+/* ==================== DATOS DEL ESTUDIO (terrenos 1 al 4) ==================== */
+const S = {
+  maxNiv:15, densidadSitio:1600, densidadT4:1600,
+  corp:{ nombre:'Torre de oficinas · terrenos 1 y 2', corto:'Oficinas',
+         suelo:2005, huella:1250, circ:.25, m2Parq:30, parqSot:70, precio:4000, costo:1700 },
+  hotel:{ nombre:'Condohotel · terreno 3', corto:'Condohotel',
+          suelo:893, huella:580, circ:.17, unidPiso:6, habPiso:18, m2Piso:481.40,
+          parqUnid:2, parqSot:23, precio:3000, costo:1500 },
+  t4:{ nombre:'Residencial · terreno 4', corto:'Residencial T4',
+       suelo:827, huella:450, circ:.17, m2Piso:373.50, parqSot:21, precio:2800, costo:1500 },
+  precioSuelo:2350, comision:.05, soft:.05, imp:.10,
+  descPreventa:.06, cobroPreventa:.35, metaRent:.35, metaAptosT4:60
 };
-/* huella construible según retiros:
-   hasta 9 niveles → frontal 5.00, laterales y posterior 3.00
-   de 10 a 15      → frontal 7.00, laterales y posterior 2.80                      */
-function ocupacionNorma(uso, suelo, banda){
-  if (uso==='corporativo') return suelo > 2000 ? 0.60 : 0.58;
-  if (banda==='alta') return suelo < 1000 ? 0.54 : 0.58;
-  return suelo <= 1000 ? 0.63 : 0.66;
+/* Habitaciones según el tamaño, leído de las tipologías del estudio:
+   55 m² una · 75 y 80 m² dos · 105 y 110 m² tres · 130 y 135 m² cuatro.
+   Habitantes = habitaciones + 1. Parqueos: uno en las de una habitación, dos de dos en adelante. */
+function habitacionesDe(m2){ return m2 < 70 ? 1 : (m2 < 100 ? 2 : (m2 < 125 ? 3 : 4)); }
+function tipologiaT4(unidPiso){
+  const m2 = S.t4.m2Piso/unidPiso, habitaciones = habitacionesDe(m2), habUnidad = habitaciones+1;
+  return { unidPiso, m2Unidad:m2, habitaciones, habUnidad, habPiso:unidPiso*habUnidad,
+           parqUnid: habitaciones===1 ? 1 : 2 };
 }
-/* producto fijo del estudio */
-const PRODUCTO = {
-  residencial:{ m2:130, hab:4.5, txt:'apartamentos de 3 y 4 habitaciones, 130 m² promedio' },
-  condohotel:{ m2:80, hab:3, txt:'unidades de 80 m² promedio' }
-};
-
-const BASE = {
-  parcelas:{
-    t1:{nombre:'Terreno 1',area:1112,norma:'sarasota'}, t2:{nombre:'Terreno 2',area:893,norma:'sarasota'},
-    t3:{nombre:'Terreno 3',area:893,norma:'helios'},    t4:{nombre:'Terreno 4',area:827,norma:'sarasota'},
-    t5:{nombre:'Terreno 5',area:830,norma:'sarasota'},  t6:{nombre:'Terreno 6',area:850,norma:'sarasota'},
-    t78:{nombre:'Terrenos 7 y 8',area:1200,norma:'sarasota'}, t910:{nombre:'Terrenos 9 y 10',area:2330,norma:'sarasota'},
-    t11:{nombre:'Terreno 11',area:990,norma:'helios'},  t12:{nombre:'Terreno 12',area:1930,norma:'helios'}
-  },
-  proyectos:[
-    {id:'corp', nombre:'Torre de oficinas', corto:'Oficinas', solares:['t1','t2'], uso:'corporativo', fase:'F1', m2Parq:30, parqSot:70},
-    {id:'hotel', nombre:'Condohotel', corto:'Condohotel', solares:['t3'], uso:'condohotel', fase:'F1', parqUnid:2, parqSot:23},
-    {id:'r4', nombre:'Residencial · Terreno 4', corto:'Residencial T4', solares:['t4'], uso:'residencial', fase:'F1', parqUnid:2, parqSot:21},
-    {id:'r5', nombre:'Residencial · Terreno 5', corto:'Residencial T5', solares:['t5'], uso:'residencial', fase:'F2', parqUnid:2, parqSot:21},
-    {id:'r6', nombre:'Residencial · Terreno 6', corto:'Residencial T6', solares:['t6'], uso:'residencial', fase:'F2', parqUnid:2, parqSot:21},
-    {id:'r78', nombre:'Residencial · Terrenos 7 y 8', corto:'Residencial T7-8', solares:['t78'], uso:'residencial', fase:'F2', parqUnid:2, parqSot:37},
-    {id:'r910', nombre:'Residencial · Terrenos 9 y 10', corto:'Residencial T9-10', solares:['t910'], uso:'residencial', fase:'F2', parqUnid:2, parqSot:82},
-    {id:'r11', nombre:'Residencial · Terreno 11', corto:'Residencial T11', solares:['t11'], uso:'residencial', fase:'F2', parqUnid:2, parqSot:28},
-    {id:'r12', nombre:'Residencial · Terreno 12', corto:'Residencial T12', solares:['t12'], uso:'residencial', fase:'F2', parqUnid:2, parqSot:66}
-  ],
-  precios:{corporativo:4000, condohotel:3000, residencial:2800},
-  costos:{corporativo:1700, condohotel:1500, residencial:1500},
-  /* preventa fija: promedio del estudio */
-  preventa:{corporativo:{pct:0,desc:0,cobro:0},
-            condohotel:{pct:.40,desc:.06,cobro:.35},
-            residencial:{pct:.25,desc:.06,cobro:.30}},
-  fin:{precioSuelo:2350, comision:.05, soft:.05, imp:.10, circCorp:.25, circRes:.17, varPrecio:0, varCosto:0}
-};
-const clone = o => JSON.parse(JSON.stringify(o));
+const PREVENTAS = [0,.30,.50,.70];
 
 /* ==================== MOTOR ==================== */
-function calcProyecto(p, s){
-  const kP = 1+s.fin.varPrecio, kC = 1+s.fin.varCosto;
-  const sol = p.solares.map(id=>s.parcelas[id]);
-  const suelo = sol.reduce((a,b)=>a+b.area,0);
-  const normaId = sol.length===1 ? sol[0].norma
-    : Object.entries(sol.reduce((a,x)=>((a[x.norma]=(a[x.norma]||0)+x.area),a),{})).sort((a,b)=>b[1]-a[1])[0][0];
-  const norma = NORMAS[normaId], maxNiv = norma.maxNiveles;
-  const habPermitidos = suelo/10000*norma.densidad;
-  const circ = p.uso==='corporativo' ? s.fin.circCorp : s.fin.circRes;
-  const prod = PRODUCTO[p.uso];
+function calc(o){
+  const habSitio = 2898/10000*o.densHotel;   /* 463.68 con la densidad de la Sarasota, 289.80 con la de Helios */
+  const habT4 = S.t4.suelo/10000*S.densidadT4;          /* 132.32 */
 
-  const evalBanda = (banda)=>{
-    if (banda==='alta' && maxNiv<10) return null;
-    const occ = ocupacionNorma(p.uso, suelo, banda);
-    const huella = suelo*occ, huellaVend = huella*(1-circ);
-    let nivDens = Infinity, unidPiso = 0, habPiso = 0;
-    if (prod){
-      unidPiso = huellaVend/prod.m2;          /* la planta se llena con el producto promedio */
-      habPiso = unidPiso*prod.hab;
-      nivDens = habPiso>0 ? habPermitidos/habPiso : Infinity;
-    }
-    let niv = Math.round(Math.min(maxNiv, nivDens));   /* pisos enteros */
-    if (banda==='baja') niv = Math.min(niv, 9);
-    else if (niv < 10) return null;
-    if (niv < 1) return null;
-    return {banda, occ, huella, huellaVend, unidPiso, habPiso, nivDens, niveles:niv, vendible:huellaVend*niv};
+  /* --- oficinas: sin densidad, el techo es la altura y el parqueo --- */
+  const corp = {...S.corp, niveles:o.nivCorp};
+  corp.construible = corp.huella*corp.niveles;
+  corp.vendible = corp.construible*(1-corp.circ);
+  corp.unidades = null;
+  corp.habitantes = 0;
+  corp.parqueos = corp.vendible/corp.m2Parq;
+  corp.sotanos = corp.parqueos/corp.parqSot;
+
+  /* --- condohotel: densidad contra el solar refundido completo --- */
+  const hotel = {...S.hotel, niveles:o.nivHotel};
+  hotel.construible = hotel.huella*hotel.niveles;
+  hotel.vendible = hotel.m2Piso*hotel.niveles;
+  hotel.unidades = hotel.unidPiso*hotel.niveles;
+  hotel.m2Unidad = hotel.m2Piso/hotel.unidPiso;
+  hotel.habitantes = hotel.habPiso*hotel.niveles;
+  hotel.habPermitidos = habSitio;
+  hotel.densidad = o.densHotel;
+  hotel.holgura = habSitio - hotel.habitantes;
+  hotel.nivDens = habSitio/hotel.habPiso;
+  hotel.nivTope = Math.min(S.maxNiv, Math.floor(hotel.nivDens));
+  hotel.densidadOK = hotel.holgura >= 0;
+  hotel.parqueos = hotel.unidades*hotel.parqUnid;
+  hotel.sotanos = hotel.parqueos/hotel.parqSot;
+
+  /* --- terreno 4: parcela propia, densidad propia --- */
+  const tipo = tipologiaT4(o.unidPisoT4);
+  const t4 = {...S.t4, ...tipo, niveles:o.nivT4};
+  t4.construible = t4.huella*t4.niveles;
+  t4.vendible = t4.m2Piso*t4.niveles;
+  t4.unidades = t4.unidPiso*t4.niveles;
+  t4.habitantes = t4.habPiso*t4.niveles;
+  t4.habPermitidos = habT4;
+  t4.holgura = habT4 - t4.habitantes;
+  t4.nivDens = habT4/t4.habPiso;
+  t4.nivTope = Math.min(S.maxNiv, Math.floor(t4.nivDens));
+  t4.densidadOK = t4.holgura >= 0;
+  t4.parqueos = t4.unidades*t4.parqUnid;
+  t4.sotanos = t4.parqueos/t4.parqSot;
+  t4.sotanosEnteros = Math.ceil(t4.sotanos);
+  t4.sotanosOK = t4.sotanosEnteros <= 3;
+  t4.metaUnidades = t4.unidades >= S.metaAptosT4;
+  /* tope absoluto de apartamentos: cada uno cuenta dos habitantes como mínimo */
+  t4.aptosMax = Math.floor(habT4/2);
+  t4.habPisoMax = habT4/t4.niveles;          /* lo que puede consumir cada planta a esta altura */
+  t4.aptosAlTope = t4.unidPiso*t4.nivTope;
+
+  /* --- sótanos del solar refundido: las dos torres excavan juntas --- */
+  const sitio = { densidad:o.densHotel, habPermitidos:habSitio, habitantes:hotel.habitantes, holgura:hotel.holgura,
+                  huella:corp.huella+hotel.huella, ocupacion:(corp.huella+hotel.huella)/2898,
+                  parqueos:corp.parqueos+hotel.parqueos, capacidadSotano:corp.parqSot+hotel.parqSot };
+  sitio.sotanos = sitio.parqueos/sitio.capacidadSotano;
+  sitio.sotanosEnteros = Math.ceil(sitio.sotanos);
+  sitio.densidadOK = hotel.densidadOK;
+
+  /* --- economía --- */
+  const preventa = {corp:0, hotel:o.preventa, t4:o.preventaT4};
+  const pl = (p,key)=>{
+    const pv = preventa[key];
+    p.precioEfectivo = p.precio*(1 - pv*S.descPreventa);
+    p.ingresos = p.vendible*p.precioEfectivo;
+    p.cTerreno = -p.suelo*S.precioSuelo;
+    p.cObra = -p.vendible*p.costo;
+    p.cVenta = -p.ingresos*(S.comision+S.soft);
+    p.inversion = -(p.cTerreno+p.cObra+p.cVenta);
+    p.bruta = p.ingresos+p.cTerreno+p.cObra+p.cVenta;
+    p.impuestos = -p.bruta*S.imp;
+    p.neta = p.bruta+p.impuestos;
+    p.margen = p.ingresos? p.neta/p.ingresos:0;
+    p.rent = p.inversion? p.neta/p.inversion:0;
+    p.unidPreventa = (p.unidades||0)*pv;
+    p.caja = p.vendible*pv*p.precio*(1-S.descPreventa)*S.cobroPreventa;
+    return p;
   };
-  const best = ['baja','alta'].map(evalBanda).filter(Boolean).reduce((a,b)=> b.vendible>a.vendible ? b : a);
-  const o = {...p, suelo, norma, normaId, habPermitidos, maxNiv, ...best};
+  pl(corp,'corp'); pl(hotel,'hotel'); pl(t4,'t4');
 
-  if (!prod){ o.unidades = null; o.m2Unidad = 0; o.habModelados = 0; }
-  else {
-    /* la mezcla de unidades se ajusta para no pasar de los habitantes permitidos */
-    o.unidades = Math.max(1, Math.min(Math.floor(habPermitidos/prod.hab), Math.floor(o.vendible/45)));
-    o.m2Unidad = o.vendible/o.unidades;
-    o.habModelados = o.unidades*prod.hab;
-  }
-  o.holgura = prod ? habPermitidos - o.habModelados : Infinity;
-  /* qué frena la altura */
-  o.limita = !prod ? 'altura'
-    : (o.niveles >= maxNiv-0.01 ? 'altura'
-      : (o.holgura <= habPermitidos*0.03 ? 'densidad'
-        : (o.banda==='baja' && o.niveles>=9 ? 'retiros' : 'densidad')));
-  o.parqueos = prod ? o.unidades*p.parqUnid : o.vendible/p.m2Parq;
-  o.sotanos = o.parqueos/p.parqSot;
-
-  const precio = s.precios[p.uso]*kP;
-  const pv = s.preventa[p.uso];
-  o.ingresos = o.vendible*precio*(1-pv.pct*pv.desc);
-  o.cTerreno = -suelo*s.fin.precioSuelo;
-  o.cObra = -o.vendible*s.costos[p.uso]*kC;
-  o.cVenta = -o.ingresos*(s.fin.comision+s.fin.soft);
-  o.bruta = o.ingresos+o.cTerreno+o.cObra+o.cVenta;
-  o.impuestos = -o.bruta*s.fin.imp;
-  o.neta = o.bruta+o.impuestos;
-  o.margen = o.ingresos? o.neta/o.ingresos : 0;
-  o.caja = o.vendible*pv.pct*precio*(1-pv.desc)*pv.cobro;
-  return o;
-}
-function calc(s){
-  const P = s.proyectos.map(p=>calcProyecto(p,s)), byId={}; P.forEach(p=>byId[p.id]=p);
-  const agg = a=>{ const o={};
-    ['suelo','vendible','huella','ingresos','cTerreno','cObra','cVenta','bruta','impuestos','neta','caja','parqueos','habPermitidos','habModelados']
-      .forEach(k=>o[k]=a.reduce((x,y)=>x+(y[k]||0),0));
-    o.unidades = a.reduce((x,y)=>x+(y.unidades||0),0);
-    o.margen = o.ingresos? o.neta/o.ingresos:0; return o; };
-  return {P, byId, f1:agg(P.filter(p=>p.fase==='F1')), f2:agg(P.filter(p=>p.fase==='F2')), total:agg(P)};
+  const P = [corp,hotel,t4], T = {};
+  ['vendible','construible','ingresos','cTerreno','cObra','cVenta','inversion','bruta','impuestos','neta','caja','parqueos']
+    .forEach(k=>T[k]=P.reduce((a,b)=>a+(b[k]||0),0));
+  T.unidades = hotel.unidades+t4.unidades;
+  T.margen = T.ingresos? T.neta/T.ingresos:0;
+  T.rent = T.inversion? T.neta/T.inversion:0;
+  T.coberturaObra = T.caja/-(corp.cObra+hotel.cObra+t4.cObra);
+  T.metaRent = T.rent >= S.metaRent;
+  T.metaMargen = T.margen >= S.metaRent;
+  T.sotanos = sitio.sotanosEnteros + t4.sotanosEnteros;
+  return {corp, hotel, t4, sitio, T, P};
 }
 
-/* ==================== OPCIONES ==================== */
-const MERCADOS = {
-  base:{ t:'Como hoy', d:'Precios y costos sin cambios', p:0, c:0 },
-  favorable:{ t:'Precio arriba, costo abajo', d:'El mejor escenario', p:.10, c:-.10 },
-  adverso:{ t:'Precio abajo, costo arriba', d:'El peor escenario', p:-.10, c:.10 },
-  enfriamiento:{ t:'Todo baja', d:'Se enfría el mercado y la construcción', p:-.10, c:-.10 },
-  inflacion:{ t:'Todo sube', d:'Inflación en obra y en venta', p:.10, c:.10 }
-};
-const DEFECTO = { corpSuelo:2005, mercado:'base' };
+/* ==================== ESTADO ==================== */
+/* punto de partida: el esquema presentado — oficinas 15 niveles, condohotel 5, T4 en su tope de densidad */
+const DEFECTO = { nivCorp:15, nivHotel:5, nivT4:9, unidPisoT4:3, densHotel:1600, preventa:0, preventaT4:.25 };
 let op = {...DEFECTO};
-function estado(o){
-  const s = clone(BASE);
-  s.parcelas.t2.area = Math.max(0, o.corpSuelo - s.parcelas.t1.area);
-  s.parcelas.t3.area = 2898 - o.corpSuelo;
-  s.fin.varPrecio = MERCADOS[o.mercado].p;
-  s.fin.varCosto  = MERCADOS[o.mercado].c;
-  return s;
-}
-const REFERENCIA = { ingresos:155420060, neta:31719266 };
-
-/* ==================== FORMATO ==================== */
+let guardados = [];
 const nf=(v,d=0)=> (v==null||!isFinite(v))?'—':v.toLocaleString('es-DO',{minimumFractionDigits:d,maximumFractionDigits:d});
 const M=v=>'US$'+(v/1e6).toLocaleString('es-DO',{minimumFractionDigits:1,maximumFractionDigits:1})+'M';
 const money=v=> v<0? '('+nf(Math.abs(v))+')' : nf(v);
 const pct=(v,d=1)=> isFinite(v)? (v*100).toFixed(d)+'%':'—';
-let guardados = [];
+const ck=(b)=>`<i class="${b?'si':'no'}">${b?'✓':'✕'}</i>`;
 
 /* ==================== RENDER ==================== */
 function render(){
-  const R = calc(estado(op));
-  const corp = R.byId.corp, hotel = R.byId.hotel;
+  const R = calc(op), T = R.T;
+  const PARTIDA = calc(DEFECTO), dNeta = T.neta - PARTIDA.T.neta;
+  const alt = o => calc({...op, ...o});
 
-  /* --- resumen --- */
-  const dif = R.total.neta - REFERENCIA.neta;
-  const D = calc(estado(DEFECTO));
-  const difBase = R.total.neta - D.total.neta;
+  const problemas = [];
+  if (!R.hotel.densidadOK) problemas.push(`el condohotel se pasa por ${nf(-R.hotel.holgura,0)} habitantes`);
+  if (!R.t4.densidadOK) problemas.push(`el Terreno 4 se pasa por ${nf(-R.t4.holgura,0)} habitantes`);
+  const sotanosProfundos = R.sitio.sotanosEnteros > 4;
+  const clase = problemas.length ? 'bad' : ((T.metaRent && !sotanosProfundos) ? 'ok' : 'warn');
+
   document.getElementById('resumen').innerHTML = `
     <div class="nums">
-    <div class="big b"><div class="v">${M(R.total.neta)}</div><div class="k">Utilidad neta del conjunto</div>
-      <div class="d ${dif>=0?'up':'down'}">${dif>=0?'▲':'▼'} ${M(Math.abs(dif))} vs. lo presentado</div></div>
-    <div class="big"><div class="v">${M(R.total.ingresos)}</div><div class="k">Ingresos por ventas</div>
-      <div class="d" style="color:var(--ink-400)">${nf(R.total.vendible)} m² vendibles</div></div>
-    <div class="big"><div class="v">${pct(R.total.margen)}</div><div class="k">Margen neto</div>
-      <div class="d" style="color:var(--ink-400)">${nf(R.total.unidades)} unidades + oficinas</div></div>
-    <div class="big"><div class="v">${M(R.total.caja)}</div><div class="k">Caja durante la obra</div>
-      <div class="d" style="color:var(--ink-400)">la aporta la preventa</div></div>
+      <div class="big meta ${T.metaRent?'':'no'}"><div class="v">${pct(T.rent)}</div>
+        <div class="k">Rentabilidad sobre la inversión <span class="tag ${T.metaRent?'si':'no'}">meta 35%</span></div>
+        <div class="d">${M(T.neta)} sobre ${M(T.inversion)}</div></div>
+      <div class="big b"><div class="v">${M(T.caja)}</div><div class="k">Caja de preventa durante la obra</div>
+        <div class="d">cubre ${pct(T.coberturaObra)} de la construcción</div></div>
+      <div class="big"><div class="v">${M(T.neta)}</div><div class="k">Utilidad neta</div>
+        <div class="d" style="color:${Math.abs(dNeta)<50000?'var(--ink-400)':(dNeta>0?'var(--success)':'var(--danger)')}">
+          ${Math.abs(dNeta)<50000?'esquema presentado':(dNeta>0?'▲':'▼')+' '+M(Math.abs(dNeta))+' vs. lo presentado'}</div></div>
+      <div class="big"><div class="v">${pct(T.margen)}</div><div class="k">Margen sobre ventas</div>
+        <div class="d">${nf(T.vendible)} m² vendibles</div></div>
+      <div class="big"><div class="v">${nf(T.parqueos)}</div><div class="k">Parqueos</div>
+        <div class="d">${T.sotanos} niveles de sótano en total</div></div>
     </div>
-    <div class="veredicto">${
-      Math.abs(difBase) < 50000
-      ? `<b>Escenario de partida.</b> Todo el conjunto queda dentro de la normativa de cada solar.
-         Mové el reparto de la esquina o el escenario de mercado.`
-      : `<b>${difBase>0?'Este escenario mejora':'Este escenario cuesta'} ${M(Math.abs(difBase))}</b>
-         contra el punto de partida. El conjunto sigue dentro de la normativa de cada solar.`}</div>`;
+    <div class="linea ${clase}">${
+      problemas.length ? `<b>Hay que ajustar:</b> ${problemas.join(' · ')}.`
+      : (Math.abs(dNeta)<50000 && op.preventa===0
+        ? `<b>Punto de partida: el esquema presentado.</b> Oficinas a quince niveles y condohotel a cinco, que
+           es donde lo dejaba la calle Helios. Refundido el solar, el condohotel tiene densidad para llegar a
+           quince: subí el deslizador y mirá la caja de preventa.`
+        : (!T.metaRent
+          ? `<b>Dentro de normativa, pero la rentabilidad queda en ${pct(T.rent)}.</b>
+             Faltan ${pct(S.metaRent-T.rent)} para la meta.`
+          : (sotanosProfundos
+            ? `<b>Cumple la meta con ${pct(T.rent)}, pero las dos torres piden ${nf(R.sitio.parqueos)} parqueos:
+               ${R.sitio.sotanosEnteros} niveles de sótano en el solar refundido.</b> Hay que validar profundidad,
+               costo de excavación y nivel freático antes de dar el número por bueno.`
+            : `<b>Escenario viable.</b> Cumple la meta de rentabilidad, el condohotel adelanta
+               ${M(R.hotel.caja)} durante la obra y los tres edificios quedan dentro de la normativa.`)))
+      }${T.metaRent && !T.metaMargen && !problemas.length ? ` El margen sobre ventas queda en ${pct(T.margen)}:
+      si la meta del 35% se mide sobre ventas y no sobre la inversión, este esquema no llega.` : ''}</div>`;
 
-  /* --- decisiones --- */
+  /* --- alturas --- */
   document.getElementById('decisiones').innerHTML = `
   <div class="dec">
-    <h3>Cómo se reparte la esquina</h3>
-    <div class="sub">Los terrenos 1, 2 y 3 son un solo predio, pero la mitad que da a la calle Helios tiene
-      una normativa más restrictiva: seis niveles en vez de quince y mil habitantes por hectárea en vez de mil
-      seiscientos. Cada metro de suelo que pasa a esa mitad rinde menos metros vendibles.</div>
-    <div class="split">
-      <div class="a" style="flex:${op.corpSuelo}"><strong>${nf(corp.suelo)} m²</strong>
-        <em>Oficinas · av. Sarasota</em>
-        <div class="q">${nf(corp.niveles)} niveles · ${nf(corp.vendible)} m² vendibles · ${M(corp.neta)}</div></div>
-      <div class="b" style="flex:${2898-op.corpSuelo}"><strong>${nf(hotel.suelo)} m²</strong>
-        <em>Condohotel · c/ Helios</em>
-        <div class="q">${nf(hotel.niveles)} niveles · ${nf(hotel.unidades)} unidades · ${M(hotel.neta)}</div></div>
+    <h3>Las dos torres del solar refundido</h3>
+    <div class="sub">Las huellas son las del estudio y no se mueven: ${nf(S.corp.huella)} m² las oficinas y
+      ${nf(S.hotel.huella)} m² el condohotel. Lo que cambia con la altura son los metros vendibles, las
+      unidades y, sobre todo, los parqueos. Los ${nf(R.sitio.habPermitidos,0)} habitantes que permite el solar
+      refundido los consume solo el condohotel: las oficinas no computan densidad. El interruptor bajo el
+      deslizador del condohotel cambia la densidad aplicada: por defecto los 1,600 habitantes por hectárea de
+      la avenida Sarasota, que es lo que se gana con la refundición, o los 1,000 de la calle Helios si
+      Planeamiento decide mantener el criterio del frente actual del Terreno 3.</div>
+    <div class="torres">
+      <div class="torre">
+        <div class="lbl"><span>Torre de oficinas</span><b>${op.nivCorp}<em> de 15</em></b></div>
+        <div class="fija">Huella fija ${nf(S.corp.huella)} m² · circulación 25%</div>
+        <input type="range" class="rng2" min="1" max="15" step="1" value="${op.nivCorp}"
+          oninput="op.nivCorp=+this.value; render()">
+        <div class="out">
+          <b>${nf(R.corp.vendible)} m²</b> vendibles de ${nf(R.corp.construible)} construidos<br>
+          <b>${nf(R.corp.parqueos)}</b> parqueos (1 cada 30 m²) en <b>${Math.ceil(R.corp.sotanos)}</b> sótanos<br>
+          utilidad <b>${M(R.corp.neta)}</b> · rentabilidad <b>${pct(R.corp.rent)}</b></div></div>
+      <div class="torre h">
+        <div class="lbl"><span>Torre condohotel</span><b>${op.nivHotel}<em> de 15</em></b></div>
+        <div class="fija">Huella fija ${nf(S.hotel.huella)} m² · 6 unidades por planta de 55 a 110 m²</div>
+        <input type="range" min="1" max="15" step="1" value="${op.nivHotel}"
+          oninput="op.nivHotel=+this.value; render()">
+        <div class="seg">
+          <button class="${op.densHotel===1600?'on':''}" onclick="op.densHotel=1600; render()">1,600 hab/Ha · Sarasota</button>
+          <button class="${op.densHotel===1000?'on':''}" onclick="op.densHotel=1000; render()">1,000 hab/Ha · Helios</button>
+        </div>
+        <div class="out">
+          <b>${nf(R.hotel.unidades)}</b> unidades · <b>${nf(R.hotel.vendible)} m²</b> vendibles<br>
+          <b>${nf(R.hotel.parqueos)}</b> parqueos (2 por unidad) en <b>${Math.ceil(R.hotel.sotanos)}</b> sótanos<br>
+          densidad <b class="${R.hotel.densidadOK?'si':'no'}">${nf(R.hotel.habitantes,0)} de
+            ${nf(R.hotel.habPermitidos,0)}</b> habitantes a ${nf(R.hotel.densidad)} hab/Ha ·
+            tope <b>${R.hotel.nivTope} niveles</b><br>
+          utilidad <b>${M(R.hotel.neta)}</b> · rentabilidad <b>${pct(R.hotel.rent)}</b></div></div>
     </div>
-    <input type="range" min="1112" max="2500" step="1" value="${op.corpSuelo}"
-      oninput="op.corpSuelo=+this.value; render()">
-    <div class="ticks"><span>Más condohotel</span>
-      <span>${(op.corpSuelo/2898*100).toFixed(0)}% del predio a oficinas</span><span>Más oficinas</span></div>
+    <div class="out" style="font-family:var(--fm);font-size:12px;color:var(--ink-600);margin-top:18px;
+      border-top:1px solid var(--ink-100);padding-top:12px">
+      Sótanos del solar refundido: <b>${nf(R.sitio.parqueos)}</b> parqueos entre las dos torres a razón de
+      ${R.sitio.capacidadSotano} por nivel → <b>${R.sitio.sotanosEnteros} niveles de excavación</b>.</div>
   </div>
 
   <div class="dec">
-    <h3>Qué pasa si el mercado se mueve</h3>
-    <div class="sub">El mismo programa construido con precios de venta y costos de construcción distintos,
-      diez por ciento arriba o abajo. El precio del suelo no cambia en ningún caso.</div>
-    <div class="opts">${Object.entries(MERCADOS).map(([k,cfg])=>{
-      const alt = calc(estado({...op, mercado:k})).total;
-      return `<button class="opt ${op.mercado===k?'on':''}" onclick="op.mercado='${k}'; render()">
-        <div class="t">${cfg.t}</div><div class="d">${cfg.d}</div>
-        <div class="r">${M(alt.neta)} · margen ${pct(alt.margen)}</div></button>`;
+    <h3>El Terreno 4</h3>
+    <div class="sub">Parcela aparte, con su propia densidad: ${nf(R.t4.habPermitidos,0)} habitantes sobre
+      ${nf(S.t4.suelo)} m². Su altura no afecta a las dos torres. La huella tampoco se mueve
+      (${nf(S.t4.huella)} m², planta vendible de ${nf(S.t4.m2Piso,1)} m²), así que bajar el metraje de los
+      apartamentos es lo mismo que meter más por planta: el segundo deslizador hace eso.</div>
+    <div class="torres">
+      <div class="torre h">
+        <div class="lbl"><span>Niveles</span><b>${op.nivT4}<em> de 15</em></b></div>
+        <div class="fija">Huella fija ${nf(S.t4.huella)} m² · circulación 17%</div>
+        <input type="range" min="1" max="15" step="1" value="${op.nivT4}"
+          oninput="op.nivT4=+this.value; render()">
+        <div class="out">A esta altura cada planta puede consumir <b>${nf(R.t4.habPisoMax,1)}</b> habitantes,
+          y ahora consume <b class="${R.t4.densidadOK?'si':'no'}">${nf(R.t4.habPiso,1)}</b>.</div></div>
+      <div class="torre">
+        <div class="lbl"><span>Apartamentos por planta</span><b>${op.unidPisoT4}<em> de ${nf(R.t4.m2Unidad)} m²</em></b></div>
+        <div class="fija">Más apartamentos por planta, más chicos</div>
+        <input type="range" class="rng2" min="2" max="8" step="1" value="${op.unidPisoT4}"
+          oninput="op.unidPisoT4=+this.value; render()">
+        <div class="out">${R.t4.habitaciones} habitaci${R.t4.habitaciones===1?'ón':'ones'} ·
+          <b>${R.t4.habUnidad}</b> habitantes por apartamento · <b>${nf(R.t4.habPiso)}</b> por planta<br>
+          con esta tipología el tope son <b>${R.t4.nivTope} niveles</b> y <b>${nf(R.t4.aptosAlTope)}
+          apartamentos</b></div></div>
+    </div>
+    <div class="chks">
+      ${ck(R.t4.metaUnidades)} <b>${nf(R.t4.unidades)}</b> apartamentos de ${nf(R.t4.m2Unidad)} m²
+        ${R.t4.metaUnidades?'':`— faltan ${nf(S.metaAptosT4-R.t4.unidades)} para los sesenta`}<br>
+      ${ck(R.t4.densidadOK)} <b>${nf(R.t4.habitantes,0)}</b> de ${nf(R.t4.habPermitidos,0)} habitantes
+        ${R.t4.densidadOK?`— sobran ${nf(R.t4.holgura,0)}`:`— se pasa por ${nf(-R.t4.holgura,0)}`}<br>
+      ${ck(R.t4.sotanosOK)} <b>${nf(R.t4.parqueos)}</b> parqueos (${R.t4.parqUnid} por apartamento) en
+        <b>${R.t4.sotanosEnteros}</b> sótano${R.t4.sotanosEnteros>1?'s':''}
+        ${R.t4.sotanosOK?'':'— por encima de los tres previstos'}<br>
+      <i style="color:var(--ink-400)">·</i> ${nf(R.t4.vendible)} m² vendibles · utilidad
+        <b>${M(R.t4.neta)}</b> · rentabilidad <b>${pct(R.t4.rent)}</b>
+    </div>
+    <div class="out" style="font-family:var(--fm);font-size:12px;color:var(--ink-600);margin-top:16px;
+      border-top:1px solid var(--ink-100);padding-top:12px">
+      El techo del solar son <b>${R.t4.aptosMax} apartamentos</b>: ${nf(R.t4.habPermitidos,0)} habitantes
+      divididos entre los dos que cuenta hasta el apartamento más chico. Los quince niveles solo admiten
+      ${nf(R.t4.habPisoMax,1)} habitantes por planta, o sea dos apartamentos de una habitación: treinta en total.
+      Sesenta apartamentos y quince niveles no caben juntos en este solar.</div>
+  </div>
+
+  <div class="dec">
+    <h3>Cuánto del condohotel se vende en preventa</h3>
+    <div class="sub">Cada unidad vendida antes de construir entra con ${pct(S.descPreventa,0)} de descuento y
+      aporta un tercio de su precio durante la obra. Es la caja que financia la construcción sin banco.</div>
+    <div class="opts">${PREVENTAS.map(v=>{
+      const a = alt({preventa:v});
+      return `<button class="opt ${Math.abs(op.preventa-v)<.001?'on':''}" onclick="op.preventa=${v}; render()">
+        <div class="t">${v===0?'Sin preventa':pct(v,0)+' del condohotel'}</div>
+        <div class="d">${v===0?'Todo se vende terminado':nf(Math.round(R.hotel.unidades*v))+' de las '+nf(R.hotel.unidades)+' unidades'}</div>
+        <div class="r">${M(a.hotel.caja)} de caja · rentabilidad ${pct(a.T.rent)}</div></button>`;
     }).join('')}</div>
   </div>`;
 
-  /* --- supuestos fijos --- */
+  /* --- supuestos --- */
   document.getElementById('supuestos').innerHTML = `<div class="supuesto">
     <div class="t">Lo que queda fijo en todos los escenarios</div>
-    <b>Producto residencial:</b> ${PRODUCTO.residencial.txt}, mezcla de tres habitaciones (cuatro habitantes)
-    y cuatro habitaciones (cinco habitantes), lo que da un promedio de ${PRODUCTO.residencial.hab} habitantes
-    por unidad. Todo el conteo de densidad sale de ese promedio.<br>
-    <b>Condohotel:</b> ${PRODUCTO.condohotel.txt} y ${PRODUCTO.condohotel.hab} habitantes por unidad.<br>
-    <b>Preventa:</b> 40% de las unidades del condohotel y 25% de las residenciales, con 6% de descuento
-    sobre el precio de lista y cobro de un tercio durante la obra.<br>
-    <b>Precios y costos:</b> suelo US$${nf(BASE.fin.precioSuelo)}/m²; venta de
-    US$${nf(BASE.precios.corporativo)}, US$${nf(BASE.precios.condohotel)} y US$${nf(BASE.precios.residencial)}/m²
-    en oficinas, condohotel y residencial; obra de US$${nf(BASE.costos.corporativo)} y
-    US$${nf(BASE.costos.condohotel)}/m². Comisión 5%, soft costs 5% e impuesto de fideicomiso 10% sobre la utilidad.
+    <b>Huellas del estudio:</b> oficinas ${nf(S.corp.huella)} m² sobre ${nf(S.corp.suelo)} m² de terreno,
+    condohotel ${nf(S.hotel.huella)} m² sobre ${nf(S.hotel.suelo)} m², Terreno 4 ${nf(S.t4.huella)} m² sobre
+    ${nf(S.t4.suelo)} m². Entre las dos torres ocupan ${pct(R.sitio.ocupacion,0)} del solar refundido.<br>
+    <b>Circulación:</b> 25% en oficinas y 17% en residencial y condohotel, que es lo que se resta de la planta
+    construida para llegar a la vendible.<br>
+    <b>Condohotel:</b> seis unidades por planta de 55, 55, 75, 80, 105 y 110 m² — dos de una habitación, dos de
+    dos y dos de tres — que suman ${nf(S.hotel.m2Piso,1)} m² y ${S.hotel.habPiso} habitantes por planta.<br>
+    <b>Parqueos:</b> uno cada 30 m² vendibles en oficinas y dos por apartamento en residencial y condohotel.
+    Por nivel de sótano caben ${S.corp.parqSot} en las oficinas, ${S.hotel.parqSot} en el condohotel y
+    ${S.t4.parqSot} en el Terreno 4. Crecen con la altura, así que cada nivel que se sube empuja la excavación.<br>
+    <b>Densidad del condohotel:</b> por defecto 1,600 habitantes por hectárea, la de la avenida Sarasota, que
+    es lo que habilita la refundición. El interruptor permite probar el escenario conservador de 1,000 de la
+    calle Helios sobre el mismo solar refundido. En los dos casos la altura máxima queda en quince niveles:
+    si Planeamiento mantuviera también el tope de altura de Helios, serían seis.<br>
+    <b>Habitaciones y habitantes:</b> una habitación cuenta dos habitantes, dos cuentan tres, tres cuentan
+    cuatro y cuatro cuentan cinco, igual que en las tipologías del estudio. El tamaño define las habitaciones:
+    bajo 70 m² una, hasta 100 m² dos, hasta 125 m² tres y de ahí en adelante cuatro. El estudio usaba tres
+    apartamentos por planta de 105, 130 y 135 m², que cuentan 14 habitantes por planta. Los apartamentos de una
+    habitación llevan un parqueo; de dos en adelante, dos.<br>
+    <b>Preventa del Terreno 4:</b> 25% de los apartamentos, fija, con el mismo descuento y cobro que el condohotel.<br>
+    <b>Precios y costos:</b> suelo US$${nf(S.precioSuelo)}/m²; venta de US$${nf(S.corp.precio)},
+    US$${nf(S.hotel.precio)} y US$${nf(S.t4.precio)}/m² en oficinas, condohotel y residencial; obra de
+    US$${nf(S.corp.costo)} y US$${nf(S.hotel.costo)}/m². Comisión 5%, soft costs 5% e impuesto de fideicomiso
+    10% sobre la utilidad. La rentabilidad es utilidad neta sobre inversión total.
   </div>`;
 
   /* --- detalle --- */
-  const pill = { altura:['alt','Altura permitida'], densidad:['den','Densidad'], retiros:['ret','Retiros'] };
   document.getElementById('detalle').innerHTML = `
-    <details class="det"><summary>El resultado en dinero<span class="q">edificio por edificio</span></summary>
+    <details class="det" open><summary>El resultado en dinero<span class="q">tres edificios</span></summary>
       <div class="det-bd"><table>
-        <tr><th>Proyecto</th><th class="r">m² vendibles</th><th class="r">Ingresos</th><th class="r">Terreno</th>
+        <tr><th>Edificio</th><th class="r">m² vendibles</th><th class="r">Ingresos</th><th class="r">Terreno</th>
           <th class="r">Construcción</th><th class="r">Comisión y soft costs</th><th class="r">Impuesto</th>
-          <th class="r">Utilidad neta</th><th class="r">Margen</th></tr>
-        ${R.P.map(p=>`<tr><td>${p.nombre}${p.fase==='F2'?' <span style="color:var(--ink-400)">· etapa 2</span>':''}</td>
-          <td class="n r">${nf(p.vendible)}</td><td class="n r">${money(p.ingresos)}</td>
-          <td class="n r">${money(p.cTerreno)}</td><td class="n r">${money(p.cObra)}</td>
-          <td class="n r">${money(p.cVenta)}</td><td class="n r">${money(p.impuestos)}</td>
-          <td class="n r">${money(p.neta)}</td><td class="n r">${pct(p.margen)}</td></tr>`).join('')}
-        <tr class="tot"><td>Total</td><td class="n r">${nf(R.total.vendible)}</td>
-          <td class="n r">${money(R.total.ingresos)}</td><td class="n r">${money(R.total.cTerreno)}</td>
-          <td class="n r">${money(R.total.cObra)}</td><td class="n r">${money(R.total.cVenta)}</td>
-          <td class="n r">${money(R.total.impuestos)}</td><td class="n r">${money(R.total.neta)}</td>
-          <td class="n r">${pct(R.total.margen)}</td></tr></table>
-        <p class="nota">Utilidad antes de costo financiero: la estructura de capital queda fuera de este modelo.</p>
+          <th class="r">Utilidad neta</th><th class="r">Margen</th><th class="r">Rentabilidad</th></tr>
+        ${R.P.map(p=>`<tr><td>${p.nombre}</td><td class="n r">${nf(p.vendible)}</td>
+          <td class="n r">${money(p.ingresos)}</td><td class="n r">${money(p.cTerreno)}</td>
+          <td class="n r">${money(p.cObra)}</td><td class="n r">${money(p.cVenta)}</td>
+          <td class="n r">${money(p.impuestos)}</td><td class="n r">${money(p.neta)}</td>
+          <td class="n r">${pct(p.margen)}</td><td class="n r">${pct(p.rent)}</td></tr>`).join('')}
+        <tr class="tot"><td>Primera etapa</td><td class="n r">${nf(T.vendible)}</td>
+          <td class="n r">${money(T.ingresos)}</td><td class="n r">${money(T.cTerreno)}</td>
+          <td class="n r">${money(T.cObra)}</td><td class="n r">${money(T.cVenta)}</td>
+          <td class="n r">${money(T.impuestos)}</td><td class="n r">${money(T.neta)}</td>
+          <td class="n r">${pct(T.margen)}</td><td class="n r">${pct(T.rent)}</td></tr></table>
+        <p class="nota">Utilidad antes de costo financiero. La inversión total es ${M(T.inversion)} entre
+          terreno, construcción, comisión y soft costs.</p>
+      </div></details>
+
+    <details class="det"><summary>Parqueos y sótanos<span class="q">crecen con la altura</span></summary>
+      <div class="det-bd"><table>
+        <tr><th>Edificio</th><th class="r">Niveles</th><th>Base del cálculo</th><th>Regla</th>
+          <th class="r">Parqueos</th><th class="r">Por sótano</th><th class="r">Sótanos</th></tr>
+        <tr><td>${S.corp.corto}</td><td class="n r">${R.corp.niveles}</td>
+          <td class="n">${nf(R.corp.vendible)} m² vendibles</td><td>1 cada 30 m²</td>
+          <td class="n r">${nf(R.corp.parqueos)}</td><td class="n r">${S.corp.parqSot}</td>
+          <td class="n r">${nf(R.corp.sotanos,2)}</td></tr>
+        <tr><td>${S.hotel.corto}</td><td class="n r">${R.hotel.niveles}</td>
+          <td class="n">${nf(R.hotel.unidades)} unidades</td><td>2 por unidad</td>
+          <td class="n r">${nf(R.hotel.parqueos)}</td><td class="n r">${S.hotel.parqSot}</td>
+          <td class="n r">${nf(R.hotel.sotanos,2)}</td></tr>
+        <tr class="tot"><td>Solar refundido</td><td class="n r">—</td>
+          <td class="n">excavación compartida</td><td>—</td>
+          <td class="n r">${nf(R.sitio.parqueos)}</td><td class="n r">${R.sitio.capacidadSotano}</td>
+          <td class="n r">${nf(R.sitio.sotanos,2)} → ${R.sitio.sotanosEnteros}</td></tr>
+        <tr><td>${S.t4.corto}</td><td class="n r">${R.t4.niveles}</td>
+          <td class="n">${nf(R.t4.unidades)} apartamentos</td><td>${R.t4.parqUnid} por apartamento</td>
+          <td class="n r">${nf(R.t4.parqueos)}</td><td class="n r">${S.t4.parqSot}</td>
+          <td class="n r">${nf(R.t4.sotanos,2)} → ${R.t4.sotanosEnteros}</td></tr>
+      </table>
+      <p class="nota">Las dos torres del solar refundido excavan juntas, así que su capacidad por nivel se suma:
+        ${S.corp.parqSot} más ${S.hotel.parqSot} son ${R.sitio.capacidadSotano} parqueos por sótano. El Terreno 4
+        excava aparte. Cada nivel que se sube en cualquiera de los tres edificios agrega parqueos, y ahí es donde
+        la altura se vuelve cara antes que en la estructura.</p>
       </div></details>
 
     <details class="det"><summary>Lo que permite la normativa<span class="q">no depende del proyecto</span></summary>
       <div class="det-bd"><table>
         <tr><th>Solar</th><th class="r">Superficie</th><th>Frente</th><th class="r">Altura máxima</th>
-          <th class="r">Densidad</th><th class="r">Habitantes permitidos</th><th class="r">Ocupación del suelo</th></tr>
-        ${R.P.map(p=>`<tr><td>${p.nombre}</td><td class="n r">${nf(p.suelo)} m²</td>
-          <td>${p.norma.nombre}</td><td class="n r">${p.maxNiv} niveles</td>
-          <td class="n r">${nf(p.norma.densidad)} hab/Ha</td>
-          <td class="n r">${p.uso==='corporativo'?'no aplica':nf(p.habPermitidos,0)}</td>
-          <td class="n r">${pct(p.occ,0)}</td></tr>`).join('')}
+          <th class="r">Densidad</th><th class="r">Habitantes permitidos</th></tr>
+        <tr><td>Solar refundido · terrenos 1, 2 y 3</td><td class="n r">2,898 m²</td>
+          <td>${R.sitio.densidad===1600?'Av. Sarasota':'C/ Helios'}</td>
+          <td class="n r">15 niveles</td><td class="n r">${nf(R.sitio.densidad)} hab/Ha</td>
+          <td class="n r">${nf(R.sitio.habPermitidos,0)}</td></tr>
+        <tr><td>Terreno 4</td><td class="n r">${nf(S.t4.suelo)} m²</td><td>Av. Sarasota</td>
+          <td class="n r">15 niveles</td><td class="n r">1,600 hab/Ha</td>
+          <td class="n r">${nf(R.t4.habPermitidos,0)}</td></tr>
       </table>
-      <p class="nota">Esta tabla es solo normativa: es el techo de cada solar antes de dibujar nada.
-        La altura máxima son quince niveles con frente a la avenida Sarasota y seis hacia la calle Helios.
-        La ocupación del suelo sale de los retiros que aplican a la altura de cada edificio: hasta nueve niveles
-        se ocupa 63% del solar (66% si pasa de 1,000 m²), y del décimo al quinceavo los retiros crecen y baja a
-        54% (58% si pasa de 1,000 m²). En oficinas sobre 2,000 m² es 60%. El corporativo no computa densidad
-        habitacional: su techo es la altura y la dotación de parqueos.</p>
+      <p class="nota">Esta tabla es solo normativa: es el techo de cada solar antes de dibujar nada. Las oficinas
+        no computan densidad habitacional, así que los ${nf(R.sitio.habPermitidos,0)} habitantes del solar
+        refundido quedan disponibles para el condohotel. Las huellas de este ejercicio son las del estudio, no
+        las que resultarían de aplicar los retiros al solar refundido: entre las dos torres ocupan
+        ${pct(R.sitio.ocupacion,0)} del solar, por encima del 58% que daría la banda de diez a quince niveles.
+        Es el otro punto a validar junto con la refundición.</p>
       </div></details>
 
     <details class="det"><summary>Lo que logra cada edificio<span class="q">resultado del ejercicio</span></summary>
       <div class="det-bd"><table>
         <tr><th></th><th class="grp r" colspan="2">Planta</th>
           <th class="grp w r sep" colspan="3">Lo que se construye</th>
-          <th class="grp w r sep" colspan="3">Contra el techo normativo</th></tr>
-        <tr><th>Proyecto</th><th class="r">Huella</th><th class="r">Planta vendible</th>
+          <th class="grp w r sep" colspan="2">Densidad</th></tr>
+        <tr><th>Edificio</th><th class="r">Huella</th><th class="r">Planta vendible</th>
           <th class="r sep">Niveles</th><th class="r">Unidades</th><th class="r">m² vendibles</th>
-          <th class="r sep">Habitantes usados</th><th class="r">Sobra</th><th>Qué frena la altura</th></tr>
-        ${R.P.map(p=>`<tr><td>${p.nombre}</td>
-          <td class="n r">${nf(p.huella)} m²</td><td class="n r">${nf(p.huellaVend)} m²</td>
-          <td class="n r sep">${nf(p.niveles)} de ${p.maxNiv}</td>
-          <td class="n r">${p.unidades!==null?nf(p.unidades)+' de '+nf(p.m2Unidad)+' m²':'oficinas'}</td>
-          <td class="n r">${nf(p.vendible)}</td>
-          <td class="n r sep">${p.unidades!==null?nf(p.habModelados,0)+' de '+nf(p.habPermitidos,0):'—'}</td>
-          <td class="n r">${p.unidades!==null?nf(p.holgura,0):'—'}</td>
-          <td><span class="pill ${pill[p.limita][0]}">${pill[p.limita][1]}</span></td></tr>`).join('')}
+          <th class="r sep">Habitantes</th><th class="r">Sobra</th></tr>
+        <tr><td>${S.corp.corto}</td><td class="n r">${nf(S.corp.huella)} m²</td>
+          <td class="n r">${nf(S.corp.huella*(1-S.corp.circ))} m²</td>
+          <td class="n r sep">${R.corp.niveles} de 15</td><td class="n r">oficinas</td>
+          <td class="n r">${nf(R.corp.vendible)}</td><td class="n r sep">no computa</td><td class="n r">—</td></tr>
+        <tr><td>${S.hotel.corto}</td><td class="n r">${nf(S.hotel.huella)} m²</td>
+          <td class="n r">${nf(S.hotel.m2Piso,1)} m²</td><td class="n r sep">${R.hotel.niveles} de 15</td>
+          <td class="n r">${nf(R.hotel.unidades)} de ${nf(R.hotel.m2Unidad)} m²</td>
+          <td class="n r">${nf(R.hotel.vendible)}</td>
+          <td class="n r sep">${nf(R.hotel.habitantes,0)} de ${nf(R.hotel.habPermitidos,0)}</td>
+          <td class="n r ${R.hotel.densidadOK?'':'no'}">${nf(R.hotel.holgura,0)}</td></tr>
+        <tr><td>${S.t4.corto}</td><td class="n r">${nf(S.t4.huella)} m²</td>
+          <td class="n r">${nf(S.t4.m2Piso,1)} m²</td><td class="n r sep">${R.t4.niveles} de 15</td>
+          <td class="n r">${nf(R.t4.unidades)} de ${nf(R.t4.m2Unidad)} m²</td>
+          <td class="n r">${nf(R.t4.vendible)}</td>
+          <td class="n r sep">${nf(R.t4.habitantes,0)} de ${nf(R.t4.habPermitidos,0)}</td>
+          <td class="n r ${R.t4.densidadOK?'':'no'}">${nf(R.t4.holgura,0)}</td></tr>
       </table>
-      <p class="nota">Ningún residencial llega a los quince niveles que permite la avenida: se agotan antes
-        los habitantes que permite la densidad. Con apartamentos de este tamaño, cada planta consume entre
-        trece y quince habitantes, y el solar solo da para ciento treinta y pico. Ahí está la diferencia entre
-        lo permitido y lo alcanzable.<br><br>
-        Además, en los solares de la Sarasota el simulador compara las dos bandas de retiro y se queda con la
-        que rinde más: por eso el T4, el T5 y el T6 se quedan en nueve niveles con planta grande, en vez de
-        subir a diez con una planta casi 15% menor. Las unidades se ajustan para no pasar de los habitantes
-        permitidos, por eso el tamaño promedio se mueve unos metros de un edificio a otro.</p>
+      <p class="nota">El condohotel puede llegar a ${R.hotel.nivTope} niveles antes de agotar los habitantes
+        del solar refundido, así que su límite real es la altura de quince. El Terreno 4 es otra historia: su
+        densidad propia lo corta en ${R.t4.nivTope} niveles con esta tipología, muy lejos de los quince.
+        Bajar el metraje mete más apartamentos por planta, pero cada uno suma habitantes: por eso el tope de
+        apartamentos del solar es ${R.t4.aptosMax} y se alcanza con unidades de una habitación en nueve u once
+        niveles, nunca en quince.</p>
       </div></details>`;
 
   renderComparar();
   document.getElementById('foot').innerHTML = `Luxia Labs · preparado para Marlen Mejía ·
-    ${new Date().toLocaleDateString('es-DO',{month:'long',year:'numeric'})}. Estudio de prefactibilidad:
-    los números son referenciales y se cierran en anteproyecto. Los niveles se expresan en enteros y las unidades
-    se ajustan a la densidad de cada solar. Referencia presentada: ${M(REFERENCIA.ingresos)} de ingresos y
-    ${M(REFERENCIA.neta)} de utilidad neta.`;
+    ${new Date().toLocaleDateString('es-DO',{month:'long',year:'numeric'})}. Ejercicio de primera etapa sobre
+    el solar refundido y el Terreno 4: no incluye los terrenos 5 al 12. Huellas, tipologías y reglas de parqueo
+    tomadas del estudio de prefactibilidad. Los números son referenciales y se cierran en anteproyecto.`;
 }
-function reset(){ op={...DEFECTO}; render(); flash('Volviste al escenario de partida'); }
+function reset(){ op={...DEFECTO}; render(); flash('Volviste al esquema presentado'); }
 function guardar(){
-  const R = calc(estado(op));
-  guardados.push({ n:guardados.length+1, op:{...op}, corp:R.byId.corp.suelo, hotel:R.byId.hotel.suelo,
-    mercado:MERCADOS[op.mercado].t, vend:R.total.vendible, unid:R.total.unidades,
-    ing:R.total.ingresos, neta:R.total.neta, margen:R.total.margen, caja:R.total.caja });
+  const R = calc(op), T = R.T;
+  guardados.push({ n:guardados.length+1, op:{...op},
+    niv:`${op.nivCorp} / ${op.nivHotel} / ${op.nivT4}`, tipo:`${op.unidPisoT4} por planta`,
+    dens:op.densHotel, prev:op.preventa,
+    vend:T.vendible, unid:T.unidades, parq:T.parqueos, sot:T.sotanos,
+    ing:T.ingresos, neta:T.neta, margen:T.margen, rent:T.rent, caja:T.caja,
+    ok:R.hotel.densidadOK && R.t4.densidadOK });
   flash('Ejercicio guardado'); renderComparar();
 }
 function renderComparar(){
   const h = document.getElementById('comparar');
   if (!guardados.length){ h.innerHTML=''; return; }
   h.innerHTML = `<details class="det" open><summary>Ejercicios guardados</summary><div class="det-bd">
-    <table><tr><th>#</th><th class="r">Oficinas</th><th class="r">Condohotel</th><th>Mercado</th>
-      <th class="r">m² vendibles</th><th class="r">Unidades</th><th class="r">Ingresos</th>
-      <th class="r">Utilidad neta</th><th class="r">Margen</th><th class="r">Caja en obra</th><th></th></tr>
-      ${guardados.map((g,i)=>`<tr><td>${g.n}</td><td class="n r">${nf(g.corp)} m²</td>
-        <td class="n r">${nf(g.hotel)} m²</td><td>${g.mercado}</td><td class="n r">${nf(g.vend)}</td>
-        <td class="n r">${nf(g.unid)}</td><td class="n r">${money(g.ing)}</td>
+    <table><tr><th>#</th><th class="r">Niveles</th><th class="r">Preventa</th><th class="r">Unidades</th>
+      <th class="r">m² vendibles</th><th class="r">Parqueos</th><th class="r">Sótanos</th>
+      <th class="r">Utilidad neta</th><th class="r">Margen</th><th class="r">Rentabilidad</th>
+      <th class="r">Caja en obra</th><th>Densidad</th><th></th></tr>
+      ${guardados.map((g,i)=>`<tr><td>${g.n}</td><td class="n r">${g.niv}</td><td class="n">${g.tipo}</td><td class="n r">${nf(g.dens)}</td>
+        <td class="n r">${pct(g.prev,0)}</td><td class="n r">${nf(g.unid)}</td>
+        <td class="n r">${nf(g.vend)}</td><td class="n r">${nf(g.parq)}</td><td class="n r">${g.sot}</td>
         <td class="n r">${money(g.neta)}</td><td class="n r">${pct(g.margen)}</td>
+        <td class="n r" style="color:${g.rent>=S.metaRent?'var(--success)':'var(--danger)'}">${pct(g.rent)}</td>
         <td class="n r">${money(g.caja)}</td>
+        <td><span class="tag ${g.ok?'si':'no'}">${g.ok?'cumple':'excede'}</span></td>
         <td class="r"><button class="btn g" style="padding:3px 9px;font-size:12px"
           onclick="op={...guardados[${i}].op}; render()">Cargar</button></td></tr>`).join('')}
-    </table><p class="nota">Los ejercicios se pierden al cerrar la página. Imprimí o guardá el PDF para conservarlos.</p>
+    </table><p class="nota">La columna de niveles es oficinas / condohotel / Terreno 4. Los ejercicios se
+      pierden al cerrar la página: imprimí o guardá el PDF para conservarlos.</p>
   </div></details>`;
 }
 function flash(m){ const e=document.getElementById('msg'); e.textContent=m; setTimeout(()=>e.textContent='',2600); }
